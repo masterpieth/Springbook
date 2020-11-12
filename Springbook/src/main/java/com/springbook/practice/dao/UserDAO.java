@@ -13,9 +13,9 @@ public class UserDAO {
 //	private SimpleConnectionMaker simpleConnectionMaker;
 	private ConnectionMaker connectionMaker; //인터페이스를 통해 오브젝트에 접근하므로 구체적 클래스 정보를 알 필요가 없다.
 	
-	public UserDAO() {
+	public UserDAO(ConnectionMaker connectionMaker) {
 //		simpleConnectionMaker = new SimpleConnectionMaker();
-		connectionMaker = new DConnectionMaker();
+		this.connectionMaker = connectionMaker;
 	}
 
 	public void add(User user) throws ClassNotFoundException, SQLException {
