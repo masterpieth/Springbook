@@ -15,6 +15,13 @@
 	</properties>
 	<dependencies>
 		
+		<!-- https://mvnrepository.com/artifact/cglib/cglib -->
+		<dependency>
+		    <groupId>cglib</groupId>
+		    <artifactId>cglib</artifactId>
+		    <version>2.2</version>
+		</dependency>
+		
 		<!-- Mysql Connector -->
 		<dependency>
 			<groupId>mysql</groupId>
