@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import com.springbook.practice.domain.User;
 
 public class UserDAO {
@@ -17,6 +19,13 @@ public class UserDAO {
 	
 	public UserDAO(ConnectionMaker connectionMaker) {
 //		simpleConnectionMaker = new SimpleConnectionMaker();
+//		1) connectionMaker = new DConnectionMaker(); => 런타임 시의 의존관계가 이미 코드속에 다 결정되어 있음
+		
+		/*
+		 * // * )의존관계 검색을 이용하는 경우 AnnotationConfigApplicationContext context = new
+		 * AnnotationConfigApplicationContext(DaoFactory.class); this.connectionMaker =
+		 * context.getBean("connectionMaker", ConnectionMaker.class);
+		 */
 		this.connectionMaker = connectionMaker;
 	}
 
