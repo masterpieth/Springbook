@@ -15,7 +15,12 @@ public class DaoFactory {
 //		return dao;
 		
 //		connectionMaker 오브젝트를 반환하는 메소드를 따로 빼서 중복코드를 제거함(리팩토링)
-		return new UserDAO(connectionMaker());
+//		return new UserDAO(connectionMaker());
+		
+		//생성자를 통해 주입받는 경우
+		UserDAO userDAO = new UserDAO();
+		userDAO.setConnectionMaker(connectionMaker());
+		return userDAO;
 	}
 	
 //	2020-11-19 daofactory는 DI 컨테이너: DconnectionMaker 오브젝트의 레퍼런스를 userdao에 전달하여,

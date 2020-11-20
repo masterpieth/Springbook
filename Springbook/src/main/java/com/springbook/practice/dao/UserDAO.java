@@ -17,18 +17,24 @@ public class UserDAO {
 	private Connection c;
 	private User user;
 	
-	public UserDAO(ConnectionMaker connectionMaker) {
-//		simpleConnectionMaker = new SimpleConnectionMaker();
-//		1) connectionMaker = new DConnectionMaker(); => 런타임 시의 의존관계가 이미 코드속에 다 결정되어 있음
-		
-		/*
-		 * // * )의존관계 검색을 이용하는 경우 AnnotationConfigApplicationContext context = new
-		 * AnnotationConfigApplicationContext(DaoFactory.class); this.connectionMaker =
-		 * context.getBean("connectionMaker", ConnectionMaker.class);
-		 */
+	//생성자를 통해서 주입받는 방법
+//	public UserDAO(ConnectionMaker connectionMaker) {
+////		simpleConnectionMaker = new SimpleConnectionMaker();
+////		1) connectionMaker = new DConnectionMaker(); => 런타임 시의 의존관계가 이미 코드속에 다 결정되어 있음
+//		
+//		/*
+//		 * // * )의존관계 검색을 이용하는 경우 AnnotationConfigApplicationContext context = new
+//		 * AnnotationConfigApplicationContext(DaoFactory.class); this.connectionMaker =
+//		 * context.getBean("connectionMaker", ConnectionMaker.class);
+//		 */
+//		this.connectionMaker = connectionMaker;
+//	}
+
+	//수정자를 통해서 주입받는 방법
+	public void setConnectionMaker(ConnectionMaker connectionMaker) {
 		this.connectionMaker = connectionMaker;
 	}
-
+	
 	public void add(User user) throws ClassNotFoundException, SQLException {
 		Connection c = connectionMaker.makeConnection(); //인터페이스에 정의된 메소드를 사용하므로, 클래스가 바뀐다고 해도 메소드 이름이 변경되지 않음
 		
