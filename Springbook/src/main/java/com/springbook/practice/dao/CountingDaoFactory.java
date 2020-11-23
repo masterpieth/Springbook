@@ -18,9 +18,10 @@ public class CountingDaoFactory {
 		return userDAO;
 	}
 	
-	@Bean
-	public ConnectionMaker connectionMaker() {
-		return new CountingConnectionMaker(realConnectionMaker());
+	//xml 로 변환하는 경우
+	@Bean //<bean
+	public ConnectionMaker connectionMaker() { //id="connectionMaker"
+		return new CountingConnectionMaker(realConnectionMaker()); //class="com.springbook.practice.dao.CountingConnectionMaker" />
 	}
 	
 	@Bean

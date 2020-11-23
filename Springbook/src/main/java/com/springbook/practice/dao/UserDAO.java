@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.springbook.practice.domain.User;
@@ -16,6 +18,9 @@ public class UserDAO {
 	private ConnectionMaker connectionMaker; //인터페이스를 통해 오브젝트에 접근하므로 구체적 클래스 정보를 알 필요가 없다.
 	private Connection c;
 	private User user;
+	
+	//datasource 사용
+	private DataSource dataSource;
 	
 	//생성자를 통해서 주입받는 방법
 //	public UserDAO(ConnectionMaker connectionMaker) {
@@ -35,8 +40,14 @@ public class UserDAO {
 		this.connectionMaker = connectionMaker;
 	}
 	
+	//dataSource사용
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+	
 	public void add(User user) throws ClassNotFoundException, SQLException {
-		Connection c = connectionMaker.makeConnection(); //인터페이스에 정의된 메소드를 사용하므로, 클래스가 바뀐다고 해도 메소드 이름이 변경되지 않음
+//		Connection c = connectionMaker.makeConnection(); //인터페이스에 정의된 메소드를 사용하므로, 클래스가 바뀐다고 해도 메소드 이름이 변경되지 않음
+		Connection c = dataSource.getConnection();
 		
 		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
 		ps.setString(1, user.getId());

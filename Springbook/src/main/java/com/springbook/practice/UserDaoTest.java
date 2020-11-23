@@ -4,6 +4,9 @@ import java.sql.SQLException;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import com.springbook.practice.dao.ConnectionMaker;
 import com.springbook.practice.dao.DConnectionMaker;
@@ -25,7 +28,12 @@ public class UserDaoTest {
 		
 		
 		//DaoFactory를 설정정보로 사용하는 애플리케이션 컨텍스트
-		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+//		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+		
+		//applicationContext.xml을 설정정보로 사용함
+		ApplicationContext context = new GenericXmlApplicationContext("/WEB-INF/spring/appServlet/applicationContext.xml");
+		
+//		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml", 클래스패스 힌트가 되는 클래스.class); 클래스의 위치를 바탕으로 xml의 위치를 추정함. 보통은 위에거씀
 		
 		//첫번째 파라미터: cpplicationcontext에 등록된 빈의 이름(메소드 이름)
 		UserDAO dao = context.getBean("userDAO", UserDAO.class);
