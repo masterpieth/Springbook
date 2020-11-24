@@ -34,7 +34,7 @@ public class UserDAO {
 //		 */
 //		this.connectionMaker = connectionMaker;
 //	}
-
+	
 	//수정자를 통해서 주입받는 방법
 	public void setConnectionMaker(ConnectionMaker connectionMaker) {
 		this.connectionMaker = connectionMaker;

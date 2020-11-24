@@ -3,14 +3,8 @@ package com.springbook.practice;
 import java.sql.SQLException;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-import com.springbook.practice.dao.ConnectionMaker;
-import com.springbook.practice.dao.DConnectionMaker;
-import com.springbook.practice.dao.DaoFactory;
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
 
@@ -31,7 +25,12 @@ public class UserDaoTest {
 //		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 		
 		//applicationContext.xml을 설정정보로 사용함
-		ApplicationContext context = new GenericXmlApplicationContext("/WEB-INF/spring/appServlet/applicationContext.xml");
+		//classpath -> build path에서 확인 src/main/resource에 넣어줌
+		
+		
+		//org/springframework/core/env/EnvironmentCapable -> spring core 설치 안되어있어서, 혹은 버전이 맞지 않음
+		//클래스 찾지 못하는 문제 -> classpath : src/main/java 혹은 src/main/resources -> 아래에 위치시킴
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 		
 //		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml", 클래스패스 힌트가 되는 클래스.class); 클래스의 위치를 바탕으로 xml의 위치를 추정함. 보통은 위에거씀
 		
