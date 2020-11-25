@@ -63,7 +63,8 @@ public class UserDAO {
 	public User get(String id) throws ClassNotFoundException, SQLException {
 		
 //		Connection c = connectionMaker.makeConnection();
-		this.c = connectionMaker.makeConnection();
+//		this.c = connectionMaker.makeConnection();
+		Connection c = dataSource.getConnection();
 		
 		PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
 		ps.setString(1, id);
