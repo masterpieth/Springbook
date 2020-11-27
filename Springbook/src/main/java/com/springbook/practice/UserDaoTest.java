@@ -10,6 +10,7 @@ import org.junit.runner.JUnitCore;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
@@ -79,17 +80,50 @@ public class UserDaoTest {
 		assertThat(dao.getCount(), is(0));
 		
 		
-		User user = new User();
-		user.setId("wronggim");
-		user.setName("김나영");
-		user.setPassword("1234");
+		User user1 = new User("wronggim", "NYK", "1234");
+		User user2 = new User("wronggim99", "NYK99", "1234");
 		
-		dao.add(user);
+		dao.add(user1);
+		dao.add(user2);
+		assertThat(dao.getCount(), is(2));
+		
+		//정말로 add된 값을 그대로 가져온것일까? 에 대한 테스트
+		User userget1 = dao.get(user1.getId());
+		assertThat(userget1.getName(), is(user1.getName()));
+		assertThat(userget1.getPassword(), is(user1.getPassword()));
+		
+		User userget2 = dao.get(user2.getId());
+		assertThat(userget2.getName(), is(user2.getName()));
+		assertThat(userget2.getPassword(), is(user2.getPassword()));
+	}
+	//하나의 테스트는 하나의 기능만 검증해야한다
+	@Test
+	public void count() throws SQLException, ClassNotFoundException {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		UserDAO dao = context.getBean("userDAO", UserDAO.class);
+		User user1 = new User("wronggim1", "NYK", "1234");
+		User user2 = new User("wronggim2", "NYK", "1234");
+		User user3 = new User("wronggim3", "NYK", "1234");
+		
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+		
+		dao.add(user1);
 		assertThat(dao.getCount(), is(1));
+		dao.add(user2);
+		assertThat(dao.getCount(), is(2));
+		dao.add(user3);
+		assertThat(dao.getCount(), is(3));
+	}
+	//값이 없을 때 예외가 발생하는 테스트
+	@Test(expected = EmptyResultDataAccessException.class)
+	public void getUserFailure() throws SQLException, ClassNotFoundException {
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		UserDAO dao = context.getBean("userDAO", UserDAO.class);
 		
-		User user2 = dao.get(user.getId());
-		
-		assertThat(user2.getName(), is(user.getName()));
-		assertThat(user2.getPassword(), is(user.getPassword()));
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+		//get에 대한 예외가 발생하기 때문에, userdao에서 get을 수정해주어야 한다.
+		dao.get("없는 ID");
 	}
 }
