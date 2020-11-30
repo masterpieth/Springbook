@@ -5,10 +5,10 @@ import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 
@@ -71,17 +71,29 @@ public class UserDaoTest {
 		
 		JUnitCore.main("com.springbook.practice.UserDaoTest");
 	}
+	
+	private UserDAO dao;
+	private User user1;
+	private User user2;
+	private User user3;
+	
 	//JUnit 테스트 메소드 적용하기
+	
+	//반복되는 작업을 별도의 메소드로 옮김
+	@Before
+	public void setUp() {
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		this.dao = context.getBean("userDAO", UserDAO.class);
+		
+		this.user1 = new User("wronggim1", "nyk1", "1234");
+		this.user2 = new User("wronggim2", "nyk2", "1234");
+		this.user3 = new User("wronggim3", "nyk3", "1234");
+	}
+	
 	@Test
 	public void addAndGet() throws ClassNotFoundException, SQLException {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		UserDAO dao = context.getBean("userDAO", UserDAO.class);
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
-		
-		
-		User user1 = new User("wronggim", "NYK", "1234");
-		User user2 = new User("wronggim99", "NYK99", "1234");
 		
 		dao.add(user1);
 		dao.add(user2);
@@ -99,11 +111,6 @@ public class UserDaoTest {
 	//하나의 테스트는 하나의 기능만 검증해야한다
 	@Test
 	public void count() throws SQLException, ClassNotFoundException {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		UserDAO dao = context.getBean("userDAO", UserDAO.class);
-		User user1 = new User("wronggim1", "NYK", "1234");
-		User user2 = new User("wronggim2", "NYK", "1234");
-		User user3 = new User("wronggim3", "NYK", "1234");
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
@@ -118,8 +125,6 @@ public class UserDaoTest {
 	//값이 없을 때 예외가 발생하는 테스트
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void getUserFailure() throws SQLException, ClassNotFoundException {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		UserDAO dao = context.getBean("userDAO", UserDAO.class);
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
