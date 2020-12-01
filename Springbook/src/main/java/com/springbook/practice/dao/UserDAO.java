@@ -71,7 +71,7 @@ public class UserDAO {
 		ps.setString(1, id);
 		
 		ResultSet rs = ps.executeQuery();
-		rs.next();
+//		rs.next();
 //		User user = new User();
 //		user.setId(rs.getString("id"));
 //		user.setName(rs.getString("name"));
@@ -99,7 +99,7 @@ public class UserDAO {
 		//결과가 없으면 예외를 발생시킨다.
 		if(user == null) throw new EmptyResultDataAccessException(1);
 		
-		return this.user;
+		return user;
 	}
 	
 	public void deleteAll() throws SQLException {
