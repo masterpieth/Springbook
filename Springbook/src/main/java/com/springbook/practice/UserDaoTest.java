@@ -8,13 +8,18 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
 
+@RunWith(SpringJUnit4ClassRunner.class) //스프링의 테스트 컨텍스트 프레임워크의 JUnit 확장기능 지정
+@ContextConfiguration(locations = "/applicationContext.xml") //테스트 컨텍스트가 자동으로 만들어줄 애플리케이션 컨텍스트의 위치 지정
 public class UserDaoTest {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		//userdao가 사용할 connectionmaker 구현 클래스를 결정하고 오브젝트를 만든다.
@@ -77,12 +82,14 @@ public class UserDaoTest {
 	private User user2;
 	private User user3;
 	
+	@Autowired
+	private ApplicationContext context; //테스트 오브젝트가 만들어지면 해당 필드에 자동으로 주입된다.
+	
 	//JUnit 테스트 메소드 적용하기
 	
 	//반복되는 작업을 별도의 메소드로 옮김
 	@Before
 	public void setUp() {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 		this.dao = context.getBean("userDAO", UserDAO.class);
 		
 		this.user1 = new User("wronggim1", "nyk1", "1234");
