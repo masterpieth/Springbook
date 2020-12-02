@@ -5,6 +5,8 @@ import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -12,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -77,24 +80,31 @@ public class UserDaoTest {
 		JUnitCore.main("com.springbook.practice.UserDaoTest");
 	}
 	
+	@Autowired
 	private UserDAO dao;
 	private User user1;
 	private User user2;
 	private User user3;
 	
-	@Autowired
-	private ApplicationContext context; //테스트 오브젝트가 만들어지면 해당 필드에 자동으로 주입된다.
+	/*
+	 * 어떤 빈이든 다 가져올 수 있고, 할당 가능한 타입을 가진 빈을 자동으로 찾기 때문에 클래스, 인터페이스 타입 모두 가능함
+	 * @Autowired
+	 * SimpleDriverDataSource dataSource;
+	 */
+//	@Autowired
+//	private ApplicationContext context; //테스트 오브젝트가 만들어지면 해당 필드에 자동으로 주입된다.
 	
 	//JUnit 테스트 메소드 적용하기
 	
 	//반복되는 작업을 별도의 메소드로 옮김
 	@Before
 	public void setUp() {
-		this.dao = context.getBean("userDAO", UserDAO.class);
-		
+//		this.dao = context.getBean("userDAO", UserDAO.class);
 		this.user1 = new User("wronggim1", "nyk1", "1234");
 		this.user2 = new User("wronggim2", "nyk2", "1234");
 		this.user3 = new User("wronggim3", "nyk3", "1234");
+//		System.out.println(this.context);
+		System.out.println(this);
 	}
 	
 	@Test
