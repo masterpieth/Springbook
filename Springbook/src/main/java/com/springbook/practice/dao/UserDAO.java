@@ -103,29 +103,67 @@ public class UserDAO {
 	}
 	
 	public void deleteAll() throws SQLException {
-		Connection c = dataSource.getConnection();
+		Connection c = null;
+		PreparedStatement ps = null;
 		
-		PreparedStatement ps = c.prepareStatement("delete from users");
-		
-		ps.executeUpdate();
-		
-		ps.close();
-		c.close();
+		try {
+			c = dataSource.getConnection();
+			ps = c.prepareStatement("delete  from users");
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+				}
+			}
+			if(c != null) {
+				try {
+					c.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
 	}
 	
 	public int getCount() throws SQLException {
-		Connection c = dataSource.getConnection();
+		Connection c = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			c = dataSource.getConnection();
+			ps = c.prepareStatement("select count(*) from users");
+			
+			//resultset에서도 sqlexception이 발생할 수 있으므로, try 블록 안에 있어야함
+			rs = ps.executeQuery();
+			rs.next();
+			return rs.getInt(1);
+			
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			//resultset에 대한 예외처리
+			if(rs != null) {
+				try {
+					rs.close(); //close()의 경우, 만들어진순서의 반대로 하는 것이 원칙
+				} catch (SQLException e) {
+				}
+			}
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+				}
+			}
+			if(c != null) {
+				try {
+					c.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
 		
-		PreparedStatement ps = c.prepareStatement("select count(*) from users");
-		
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		int count = rs.getInt(1);
-		
-		rs.close();
-		ps.close();
-		c.close();
-		
-		return count;
 	}
 }
