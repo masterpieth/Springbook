@@ -10,8 +10,8 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 public class DaoFactory {
 	
 	
-	@Bean //오브젝트 생성을 담당하는 IoC용 메소드라는 표시
-	public UserDAO userDAO() {
+//	@Bean //오브젝트 생성을 담당하는 IoC용 메소드라는 표시
+//	public UserDAO userDAO() {
 		//userdao 타입의 오브젝트를 어떻게 만들고, 어떻게 준비시킬지를 결정한다.
 //		ConnectionMaker connectionMaker = new DConnectionMaker();
 //		UserDAO dao = new UserDAO(connectionMaker);
@@ -21,11 +21,11 @@ public class DaoFactory {
 //		return new UserDAO(connectionMaker());
 		
 		//생성자를 통해 주입받는 경우
-		UserDAO userDAO = new UserDAO();
+//		UserDAO userDAO = new UserDAO();
 //		userDAO.setConnectionMaker(connectionMaker());
-		userDAO.setDataSource(dataSource());
-		return userDAO;
-	}
+//		userDAO.setDataSource(dataSource());
+//		return userDAO;
+//	}
 	
 //	2020-11-19 daofactory는 DI 컨테이너: DconnectionMaker 오브젝트의 레퍼런스를 userdao에 전달하여,
 //	런타임시에 둘의 의존관계를 만드는 역할을 함

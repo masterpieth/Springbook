@@ -13,7 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.springbook.practice.domain.User;
 
-public class UserDAO {
+public abstract class UserDAO {
 	
 //	private SimpleConnectionMaker simpleConnectionMaker;
 	private ConnectionMaker connectionMaker; //인터페이스를 통해 오브젝트에 접근하므로 구체적 클래스 정보를 알 필요가 없다.
@@ -108,7 +108,8 @@ public class UserDAO {
 		
 		try {
 			c = dataSource.getConnection();
-			ps = c.prepareStatement("delete  from users");
+			StatementStrategy strategy = new DeleteAllStatement();
+			ps = strategy.makePreparedStatement(c);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw e;
@@ -164,6 +165,6 @@ public class UserDAO {
 				}
 			}
 		}
-		
 	}
+	abstract protected PreparedStatement makeStatement(Connection c) throws SQLException ;
 }
