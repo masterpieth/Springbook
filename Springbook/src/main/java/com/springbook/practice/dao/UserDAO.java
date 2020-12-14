@@ -48,17 +48,21 @@ public abstract class UserDAO {
 	
 	public void add(User user) throws ClassNotFoundException, SQLException {
 //		Connection c = connectionMaker.makeConnection(); //인터페이스에 정의된 메소드를 사용하므로, 클래스가 바뀐다고 해도 메소드 이름이 변경되지 않음
-		Connection c = dataSource.getConnection();
+//		Connection c = dataSource.getConnection();
+//		
+//		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
+//		ps.setString(1, user.getId());
+//		ps.setString(2, user.getName());
+//		ps.setString(3, user.getPassword());
+//		
+//		ps.executeUpdate();
+//		
+//		ps.close();
+//		c.close();
 		
-		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
-		ps.setString(1, user.getId());
-		ps.setString(2, user.getName());
-		ps.setString(3, user.getPassword());
-		
-		ps.executeUpdate();
-		
-		ps.close();
-		c.close();
+		//전략 패턴을 사용한 메소드 분리
+		StatementStrategy st = new AddStatement(user);
+		jdbcContextWithStatmentStrategy(st);
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
@@ -103,13 +107,16 @@ public abstract class UserDAO {
 	}
 	
 	public void deleteAll() throws SQLException {
+		StatementStrategy st = new DeleteAllStatement();
+		jdbcContextWithStatmentStrategy(st);
+	}
+	public void jdbcContextWithStatmentStrategy(StatementStrategy stmt) throws SQLException{
 		Connection c = null;
 		PreparedStatement ps = null;
 		
 		try {
 			c = dataSource.getConnection();
-			StatementStrategy strategy = new DeleteAllStatement();
-			ps = strategy.makePreparedStatement(c);
+			ps = stmt.makePreparedStatement(c);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw e;
@@ -128,7 +135,6 @@ public abstract class UserDAO {
 			}
 		}
 	}
-	
 	public int getCount() throws SQLException {
 		Connection c = null;
 		PreparedStatement ps = null;

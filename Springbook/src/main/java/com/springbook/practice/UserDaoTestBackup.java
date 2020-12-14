@@ -106,7 +106,7 @@ public class UserDaoTestBackup {
 		//테스트에서 userdao가 사용할 오브젝트를 직접 생성함(비추)
 //		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
 		
-		dao = new UserDAO();
+//		dao = new UserDAO();
 		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
 		dao.setDataSource(dataSource);
 	}
