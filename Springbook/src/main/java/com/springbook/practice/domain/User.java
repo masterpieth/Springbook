@@ -31,7 +31,7 @@ public class User {
 		this.name = name;
 		this.password = password;
 	}
-	//ÀÚ¹Ùºó ±Ô¾àÀ» µû¸£´Â Å¬·¡½º¿¡ »ý¼ºÀÚ¸¦ ¸í½ÃÀûÀ¸·Î Ãß°¡ÇßÀ» ¶§´Â µðÆúÆ® »ý¼ºÀÚµµ »ý¼ºÇØÁà¾ß ÇÔ
+	//ìžë°”ë¹ˆ ê·œì•½ì„ ë”°ë¥´ëŠ” í´ëž˜ìŠ¤ì— ìƒì„±ìžë¥¼ ëª…ì‹œì ìœ¼ë¡œ ì¶”ê°€í–ˆì„ ë•ŒëŠ” ë””í´íŠ¸ ìƒì„±ìžë„ ìƒì„±í•´ì¤˜ì•¼ í•¨
 	public User() {
 	}
 }

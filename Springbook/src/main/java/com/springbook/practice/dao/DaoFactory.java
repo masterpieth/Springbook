@@ -6,40 +6,40 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-@Configuration //¾ÖÇÃ¸®ÄÉÀÌ¼Ç ÄÁÅØ½ºÆ® ¶Ç´Â ºó ÆÑÅä¸®°¡ »ç¿ëÇÒ ¼³Á¤Á¤º¸¶ó´Â Ç¥½Ã
+@Configuration //ì• í”Œë¦¬ì¼€ì´ì…˜ ì»¨í…ìŠ¤íŠ¸ ë˜ëŠ” ë¹ˆ íŒ©í† ë¦¬ê°€ ì‚¬ìš©í•  ì„¤ì •ì •ë³´ë¼ëŠ” í‘œì‹œ
 public class DaoFactory {
 	
 	
-//	@Bean //¿ÀºêÁ§Æ® »ı¼ºÀ» ´ã´çÇÏ´Â IoC¿ë ¸Ş¼Òµå¶ó´Â Ç¥½Ã
+//	@Bean //ì˜¤ë¸Œì íŠ¸ ìƒì„±ì„ ë‹´ë‹¹í•˜ëŠ” IoCìš© ë©”ì†Œë“œë¼ëŠ” í‘œì‹œ
 //	public UserDAO userDAO() {
-		//userdao Å¸ÀÔÀÇ ¿ÀºêÁ§Æ®¸¦ ¾î¶»°Ô ¸¸µé°í, ¾î¶»°Ô ÁØºñ½ÃÅ³Áö¸¦ °áÁ¤ÇÑ´Ù.
+		//userdao íƒ€ì…ì˜ ì˜¤ë¸Œì íŠ¸ë¥¼ ì–´ë–»ê²Œ ë§Œë“¤ê³ , ì–´ë–»ê²Œ ì¤€ë¹„ì‹œí‚¬ì§€ë¥¼ ê²°ì •í•œë‹¤.
 //		ConnectionMaker connectionMaker = new DConnectionMaker();
 //		UserDAO dao = new UserDAO(connectionMaker);
 //		return dao;
 		
-//		connectionMaker ¿ÀºêÁ§Æ®¸¦ ¹İÈ¯ÇÏ´Â ¸Ş¼Òµå¸¦ µû·Î »©¼­ Áßº¹ÄÚµå¸¦ Á¦°ÅÇÔ(¸®ÆÑÅä¸µ)
+//		connectionMaker ì˜¤ë¸Œì íŠ¸ë¥¼ ë°˜í™˜í•˜ëŠ” ë©”ì†Œë“œë¥¼ ë”°ë¡œ ë¹¼ì„œ ì¤‘ë³µì½”ë“œë¥¼ ì œê±°í•¨(ë¦¬íŒ©í† ë§)
 //		return new UserDAO(connectionMaker());
 		
-		//»ı¼ºÀÚ¸¦ ÅëÇØ ÁÖÀÔ¹Ş´Â °æ¿ì
+		//ìƒì„±ìë¥¼ í†µí•´ ì£¼ì…ë°›ëŠ” ê²½ìš°
 //		UserDAO userDAO = new UserDAO();
 //		userDAO.setConnectionMaker(connectionMaker());
 //		userDAO.setDataSource(dataSource());
 //		return userDAO;
 //	}
 	
-//	2020-11-19 daofactory´Â DI ÄÁÅ×ÀÌ³Ê: DconnectionMaker ¿ÀºêÁ§Æ®ÀÇ ·¹ÆÛ·±½º¸¦ userdao¿¡ Àü´ŞÇÏ¿©,
-//	·±Å¸ÀÓ½Ã¿¡ µÑÀÇ ÀÇÁ¸°ü°è¸¦ ¸¸µå´Â ¿ªÇÒÀ» ÇÔ
+//	2020-11-19 daofactoryëŠ” DI ì»¨í…Œì´ë„ˆ: DconnectionMaker ì˜¤ë¸Œì íŠ¸ì˜ ë ˆí¼ëŸ°ìŠ¤ë¥¼ userdaoì— ì „ë‹¬í•˜ì—¬,
+//	ëŸ°íƒ€ì„ì‹œì— ë‘˜ì˜ ì˜ì¡´ê´€ê³„ë¥¼ ë§Œë“œëŠ” ì—­í• ì„ í•¨
 	@Bean
 	public ConnectionMaker connectionMaker() {
 		return new DConnectionMaker();
 	}
 	
-	//2020-11-23 dataSource ¸¦ »ç¿ëÇÑ DI
+	//2020-11-23 dataSource ë¥¼ ì‚¬ìš©í•œ DI
 	@Bean
 	public DataSource dataSource() {
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-		//DB¿¬°áÁ¤º¸ -> ¿ÀºêÁ§Æ® ·¹º§¿¡¼­ DB ¿¬°á¹æ½ÄÀ» º¯°æÇÒ ¼ö ÀÖÀ½
-																	//xml¿¡¼­ ¼³Á¤ÇÏ´Â °æ¿ì
+		//DBì—°ê²°ì •ë³´ -> ì˜¤ë¸Œì íŠ¸ ë ˆë²¨ì—ì„œ DB ì—°ê²°ë°©ì‹ì„ ë³€ê²½í•  ìˆ˜ ìˆìŒ
+																	//xmlì—ì„œ ì„¤ì •í•˜ëŠ” ê²½ìš°
 		dataSource.setDriverClass(com.mysql.jdbc.Driver.class); 	//<property name="driverClass" value="com.mysql.jdbc.Driver"/>
 		dataSource.setUrl("jdbc:mysql://localhost/springbook");		//<property name="url" value="jdbc:mysql://localhost/springbook"/>
 		dataSource.setUsername("root");								//<property name="username" value="root"/>

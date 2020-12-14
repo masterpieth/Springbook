@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-//Àü·« ÆĞÅÏÀ» »ç¿ëÇÑ ±â´É ºĞ¸®. ÀÎÅÍÆäÀÌ½º(Àü·«) ±¸Çö Å¬·¡½º
+//ì „ëµ íŒ¨í„´ì„ ì‚¬ìš©í•œ ê¸°ëŠ¥ ë¶„ë¦¬. ì¸í„°í˜ì´ìŠ¤(ì „ëµ) êµ¬í˜„ í´ë˜ìŠ¤
 public class DeleteAllStatement implements StatementStrategy{
 
 	@Override

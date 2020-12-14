@@ -82,6 +82,6 @@ public class UserDaoTest {
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
-		dao.get("¾ø´Â ID");
+		dao.get("ì—†ëŠ” ID");
 	}
 }

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-//ÅÛÇÃ¸´ ¸Ş¼Òµå ÆĞÅÏÀ» ÀÌ¿ëÇÑ context ºĞ¸®
+//í…œí”Œë¦¿ ë©”ì†Œë“œ íŒ¨í„´ì„ ì´ìš©í•œ context ë¶„ë¦¬
 public class UserDAODeleteAll extends UserDAO{
 
 	@Override

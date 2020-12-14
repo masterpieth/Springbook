@@ -16,38 +16,38 @@ import com.springbook.practice.domain.User;
 public abstract class UserDAO {
 	
 //	private SimpleConnectionMaker simpleConnectionMaker;
-	private ConnectionMaker connectionMaker; //ÀÎÅÍÆäÀÌ½º¸¦ ÅëÇØ ¿ÀºêÁ§Æ®¿¡ Á¢±ÙÇÏ¹Ç·Î ±¸Ã¼Àû Å¬·¡½º Á¤º¸¸¦ ¾Ë ÇÊ¿ä°¡ ¾ø´Ù.
+	private ConnectionMaker connectionMaker; //ì¸í„°í˜ì´ìŠ¤ë¥¼ í†µí•´ ì˜¤ë¸Œì íŠ¸ì— ì ‘ê·¼í•˜ë¯€ë¡œ êµ¬ì²´ì  í´ë˜ìŠ¤ ì •ë³´ë¥¼ ì•Œ í•„ìš”ê°€ ì—†ë‹¤.
 	private Connection c;
 	private User user;
 	
-	//datasource »ç¿ë
+	//datasource ì‚¬ìš©
 	private DataSource dataSource;
 	
-	//»ı¼ºÀÚ¸¦ ÅëÇØ¼­ ÁÖÀÔ¹Ş´Â ¹æ¹ı
+	//ìƒì„±ìë¥¼ í†µí•´ì„œ ì£¼ì…ë°›ëŠ” ë°©ë²•
 //	public UserDAO(ConnectionMaker connectionMaker) {
 ////		simpleConnectionMaker = new SimpleConnectionMaker();
-////		1) connectionMaker = new DConnectionMaker(); => ·±Å¸ÀÓ ½ÃÀÇ ÀÇÁ¸°ü°è°¡ ÀÌ¹Ì ÄÚµå¼Ó¿¡ ´Ù °áÁ¤µÇ¾î ÀÖÀ½
+////		1) connectionMaker = new DConnectionMaker(); => ëŸ°íƒ€ì„ ì‹œì˜ ì˜ì¡´ê´€ê³„ê°€ ì´ë¯¸ ì½”ë“œì†ì— ë‹¤ ê²°ì •ë˜ì–´ ìˆìŒ
 //		
 //		/*
-//		 * // * )ÀÇÁ¸°ü°è °Ë»öÀ» ÀÌ¿ëÇÏ´Â °æ¿ì AnnotationConfigApplicationContext context = new
+//		 * // * )ì˜ì¡´ê´€ê³„ ê²€ìƒ‰ì„ ì´ìš©í•˜ëŠ” ê²½ìš° AnnotationConfigApplicationContext context = new
 //		 * AnnotationConfigApplicationContext(DaoFactory.class); this.connectionMaker =
 //		 * context.getBean("connectionMaker", ConnectionMaker.class);
 //		 */
 //		this.connectionMaker = connectionMaker;
 //	}
 	
-	//¼öÁ¤ÀÚ¸¦ ÅëÇØ¼­ ÁÖÀÔ¹Ş´Â ¹æ¹ı
+	//ìˆ˜ì •ìë¥¼ í†µí•´ì„œ ì£¼ì…ë°›ëŠ” ë°©ë²•
 	public void setConnectionMaker(ConnectionMaker connectionMaker) {
 		this.connectionMaker = connectionMaker;
 	}
 	
-	//dataSource»ç¿ë
+	//dataSourceì‚¬ìš©
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 	
 	public void add(User user) throws ClassNotFoundException, SQLException {
-//		Connection c = connectionMaker.makeConnection(); //ÀÎÅÍÆäÀÌ½º¿¡ Á¤ÀÇµÈ ¸Ş¼Òµå¸¦ »ç¿ëÇÏ¹Ç·Î, Å¬·¡½º°¡ ¹Ù²ï´Ù°í ÇØµµ ¸Ş¼Òµå ÀÌ¸§ÀÌ º¯°æµÇÁö ¾ÊÀ½
+//		Connection c = connectionMaker.makeConnection(); //ì¸í„°í˜ì´ìŠ¤ì— ì •ì˜ëœ ë©”ì†Œë“œë¥¼ ì‚¬ìš©í•˜ë¯€ë¡œ, í´ë˜ìŠ¤ê°€ ë°”ë€ë‹¤ê³  í•´ë„ ë©”ì†Œë“œ ì´ë¦„ì´ ë³€ê²½ë˜ì§€ ì•ŠìŒ
 //		Connection c = dataSource.getConnection();
 //		
 //		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
@@ -60,7 +60,7 @@ public abstract class UserDAO {
 //		ps.close();
 //		c.close();
 		
-		//Àü·« ÆĞÅÏÀ» »ç¿ëÇÑ ¸Ş¼Òµå ºĞ¸®
+		//ì „ëµ íŒ¨í„´ì„ ì‚¬ìš©í•œ ë©”ì†Œë“œ ë¶„ë¦¬
 		StatementStrategy st = new AddStatement(user);
 		jdbcContextWithStatmentStrategy(st);
 	}
@@ -86,10 +86,10 @@ public abstract class UserDAO {
 //		this.user.setName(rs.getString("name"));
 //		this.user.setPassword(rs.getString("password"));
 		
-		//°ªÀÌ ¾ø´Â °æ¿ì¸¦ À§ÇÑ ¿¹¿ÜÃ³¸®
+		//ê°’ì´ ì—†ëŠ” ê²½ìš°ë¥¼ ìœ„í•œ ì˜ˆì™¸ì²˜ë¦¬
 		User user = null;
 		if(rs.next()) {
-			//°á°ú°¡ ÀÖÀ¸¸é °ªÀ» ¼¼ÆÃÇÔ
+			//ê²°ê³¼ê°€ ìˆìœ¼ë©´ ê°’ì„ ì„¸íŒ…í•¨
 			user = new User();
 			user.setId(rs.getString("id"));
 			user.setName(rs.getString("name"));
@@ -100,7 +100,7 @@ public abstract class UserDAO {
 		ps.close();
 		c.close();
 		
-		//°á°ú°¡ ¾øÀ¸¸é ¿¹¿Ü¸¦ ¹ß»ı½ÃÅ²´Ù.
+		//ê²°ê³¼ê°€ ì—†ìœ¼ë©´ ì˜ˆì™¸ë¥¼ ë°œìƒì‹œí‚¨ë‹¤.
 		if(user == null) throw new EmptyResultDataAccessException(1);
 		
 		return user;
@@ -143,7 +143,7 @@ public abstract class UserDAO {
 			c = dataSource.getConnection();
 			ps = c.prepareStatement("select count(*) from users");
 			
-			//resultset¿¡¼­µµ sqlexceptionÀÌ ¹ß»ıÇÒ ¼ö ÀÖÀ¸¹Ç·Î, try ºí·Ï ¾È¿¡ ÀÖ¾î¾ßÇÔ
+			//resultsetì—ì„œë„ sqlexceptionì´ ë°œìƒí•  ìˆ˜ ìˆìœ¼ë¯€ë¡œ, try ë¸”ë¡ ì•ˆì— ìˆì–´ì•¼í•¨
 			rs = ps.executeQuery();
 			rs.next();
 			return rs.getInt(1);
@@ -151,10 +151,10 @@ public abstract class UserDAO {
 		} catch (SQLException e) {
 			throw e;
 		} finally {
-			//resultset¿¡ ´ëÇÑ ¿¹¿ÜÃ³¸®
+			//resultsetì— ëŒ€í•œ ì˜ˆì™¸ì²˜ë¦¬
 			if(rs != null) {
 				try {
-					rs.close(); //close()ÀÇ °æ¿ì, ¸¸µé¾îÁø¼ø¼­ÀÇ ¹İ´ë·Î ÇÏ´Â °ÍÀÌ ¿øÄ¢
+					rs.close(); //close()ì˜ ê²½ìš°, ë§Œë“¤ì–´ì§„ìˆœì„œì˜ ë°˜ëŒ€ë¡œ í•˜ëŠ” ê²ƒì´ ì›ì¹™
 				} catch (SQLException e) {
 				}
 			}
@@ -174,3 +174,4 @@ public abstract class UserDAO {
 	}
 	abstract protected PreparedStatement makeStatement(Connection c) throws SQLException ;
 }
+

@@ -18,84 +18,84 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
 
-@RunWith(SpringJUnit4ClassRunner.class) //½ºÇÁ¸µÀÇ Å×½ºÆ® ÄÁÅØ½ºÆ® ÇÁ·¹ÀÓ¿öÅ©ÀÇ JUnit È®Àå±â´É ÁöÁ¤
-//@ContextConfiguration(locations = "/applicationContext.xml") //Å×½ºÆ® ÄÁÅØ½ºÆ®°¡ ÀÚµ¿À¸·Î ¸¸µé¾îÁÙ ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ÄÁÅØ½ºÆ®ÀÇ À§Ä¡ ÁöÁ¤
-//@DirtiesContext // Å×½ºÆ® ¸Ş¼Òµå¿¡¼­ ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ÄÁÅØ½ºÆ®ÀÇ ±¸¼ºÀÌ³ª »óÅÂ¸¦ º¯°æÇÑ´Ù´Â °ÍÀ» ÄÁÅØ½ºÆ® ÇÁ·¹ÀÓ¿öÅ©¿¡ ¾Ë·ÁÁÜ
-//@ContextConfiguration(locations = "/test-applicationContext.xml") //Å×½ºÆ®½Ã¿¡´Â Å×½ºÆ®¿ë ¼³Á¤ÆÄÀÏÀ» »ç¿ëÇÔ
+@RunWith(SpringJUnit4ClassRunner.class) //ìŠ¤í”„ë§ì˜ í…ŒìŠ¤íŠ¸ ì»¨í…ìŠ¤íŠ¸ í”„ë ˆì„ì›Œí¬ì˜ JUnit í™•ì¥ê¸°ëŠ¥ ì§€ì •
+//@ContextConfiguration(locations = "/applicationContext.xml") //í…ŒìŠ¤íŠ¸ ì»¨í…ìŠ¤íŠ¸ê°€ ìë™ìœ¼ë¡œ ë§Œë“¤ì–´ì¤„ ì• í”Œë¦¬ì¼€ì´ì…˜ ì»¨í…ìŠ¤íŠ¸ì˜ ìœ„ì¹˜ ì§€ì •
+//@DirtiesContext // í…ŒìŠ¤íŠ¸ ë©”ì†Œë“œì—ì„œ ì• í”Œë¦¬ì¼€ì´ì…˜ ì»¨í…ìŠ¤íŠ¸ì˜ êµ¬ì„±ì´ë‚˜ ìƒíƒœë¥¼ ë³€ê²½í•œë‹¤ëŠ” ê²ƒì„ ì»¨í…ìŠ¤íŠ¸ í”„ë ˆì„ì›Œí¬ì— ì•Œë ¤ì¤Œ
+//@ContextConfiguration(locations = "/test-applicationContext.xml") //í…ŒìŠ¤íŠ¸ì‹œì—ëŠ” í…ŒìŠ¤íŠ¸ìš© ì„¤ì •íŒŒì¼ì„ ì‚¬ìš©í•¨
 public class UserDaoTestBackup {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		//userdao°¡ »ç¿ëÇÒ connectionmaker ±¸Çö Å¬·¡½º¸¦ °áÁ¤ÇÏ°í ¿ÀºêÁ§Æ®¸¦ ¸¸µç´Ù.
+		//userdaoê°€ ì‚¬ìš©í•  connectionmaker êµ¬í˜„ í´ë˜ìŠ¤ë¥¼ ê²°ì •í•˜ê³  ì˜¤ë¸Œì íŠ¸ë¥¼ ë§Œë“ ë‹¤.
 //		ConnectionMaker connectionMaker = new DConnectionMaker();
 		
-		//dao¿¡°Ô ³Ñ°ÜÁÜÀ¸·Î½á µÎ ¿ÀºêÁ§Æ® »çÀÌÀÇ ÀÇÁ¸°ü°è°¡ ¼³Á¤µÈ´Ù.
+		//daoì—ê²Œ ë„˜ê²¨ì¤Œìœ¼ë¡œì¨ ë‘ ì˜¤ë¸Œì íŠ¸ ì‚¬ì´ì˜ ì˜ì¡´ê´€ê³„ê°€ ì„¤ì •ëœë‹¤.
 //		UserDAO dao = new UserDAO(connectionMaker);
-		//À§ ÀÛ¾÷Àº userDao¿Í connectionMaker ±¸Çö Å¬·¡½º¿ÍÀÇ ·±Å¸ÀÓ ¿ÀºêÁ§Æ® ÀÇÁ¸°ü°è¸¦ ¼³Á¤ÇÏ´Â Ã¥ÀÓÀ» Å¬¶óÀÌ¾ğÆ®·Î °¡Á®¿Â °á°úÀÌ´Ù.
+		//ìœ„ ì‘ì—…ì€ userDaoì™€ connectionMaker êµ¬í˜„ í´ë˜ìŠ¤ì™€ì˜ ëŸ°íƒ€ì„ ì˜¤ë¸Œì íŠ¸ ì˜ì¡´ê´€ê³„ë¥¼ ì„¤ì •í•˜ëŠ” ì±…ì„ì„ í´ë¼ì´ì–¸íŠ¸ë¡œ ê°€ì ¸ì˜¨ ê²°ê³¼ì´ë‹¤.
 		
-		//ÆÑÅä¸®¸¦ »ç¿ëÇØ¼­ dao¸¦ ¹Ş¾Æ¼­ »ç¿ëÇÔ
+		//íŒ©í† ë¦¬ë¥¼ ì‚¬ìš©í•´ì„œ daoë¥¼ ë°›ì•„ì„œ ì‚¬ìš©í•¨
 //		UserDAO dao = new DaoFactory().userDAO();
 		
 		
-		//DaoFactory¸¦ ¼³Á¤Á¤º¸·Î »ç¿ëÇÏ´Â ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ÄÁÅØ½ºÆ®
+		//DaoFactoryë¥¼ ì„¤ì •ì •ë³´ë¡œ ì‚¬ìš©í•˜ëŠ” ì• í”Œë¦¬ì¼€ì´ì…˜ ì»¨í…ìŠ¤íŠ¸
 //		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 		
-		//applicationContext.xmlÀ» ¼³Á¤Á¤º¸·Î »ç¿ëÇÔ
-		//classpath -> build path¿¡¼­ È®ÀÎ src/main/resource¿¡ ³Ö¾îÁÜ
+		//applicationContext.xmlì„ ì„¤ì •ì •ë³´ë¡œ ì‚¬ìš©í•¨
+		//classpath -> build pathì—ì„œ í™•ì¸ src/main/resourceì— ë„£ì–´ì¤Œ
 		
 		
-		//org/springframework/core/env/EnvironmentCapable -> spring core ¼³Ä¡ ¾ÈµÇ¾îÀÖ¾î¼­, È¤Àº ¹öÀüÀÌ ¸ÂÁö ¾ÊÀ½ -> classnotFound´Â ´ëÃ¼·Î ´Ù ¶óÀÌºê·¯¸®ÀÇ ¹®Á¦
-		//Å¬·¡½º Ã£Áö ¸øÇÏ´Â ¹®Á¦ -> classpath : src/main/java È¤Àº src/main/resources -> ¾Æ·¡¿¡ À§Ä¡½ÃÅ´
+		//org/springframework/core/env/EnvironmentCapable -> spring core ì„¤ì¹˜ ì•ˆë˜ì–´ìˆì–´ì„œ, í˜¹ì€ ë²„ì „ì´ ë§ì§€ ì•ŠìŒ -> classnotFoundëŠ” ëŒ€ì²´ë¡œ ë‹¤ ë¼ì´ë¸ŒëŸ¬ë¦¬ì˜ ë¬¸ì œ
+		//í´ë˜ìŠ¤ ì°¾ì§€ ëª»í•˜ëŠ” ë¬¸ì œ -> classpath : src/main/java í˜¹ì€ src/main/resources -> ì•„ë˜ì— ìœ„ì¹˜ì‹œí‚´
 //		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 		
-//		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml", Å¬·¡½ºÆĞ½º ÈùÆ®°¡ µÇ´Â Å¬·¡½º.class); Å¬·¡½ºÀÇ À§Ä¡¸¦ ¹ÙÅÁÀ¸·Î xmlÀÇ À§Ä¡¸¦ ÃßÁ¤ÇÔ. º¸ÅëÀº À§¿¡°Å¾¸
+//		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml", í´ë˜ìŠ¤íŒ¨ìŠ¤ íŒíŠ¸ê°€ ë˜ëŠ” í´ë˜ìŠ¤.class); í´ë˜ìŠ¤ì˜ ìœ„ì¹˜ë¥¼ ë°”íƒ•ìœ¼ë¡œ xmlì˜ ìœ„ì¹˜ë¥¼ ì¶”ì •í•¨. ë³´í†µì€ ìœ„ì—ê±°ì”€
 		
-		//Ã¹¹øÂ° ÆÄ¶ó¹ÌÅÍ: cpplicationcontext¿¡ µî·ÏµÈ ºóÀÇ ÀÌ¸§(¸Ş¼Òµå ÀÌ¸§)
+		//ì²«ë²ˆì§¸ íŒŒë¼ë¯¸í„°: cpplicationcontextì— ë“±ë¡ëœ ë¹ˆì˜ ì´ë¦„(ë©”ì†Œë“œ ì´ë¦„)
 //		UserDAO dao = context.getBean("userDAO", UserDAO.class);
 //		
 //		User user = new User();
 //		user.setId("wronggim");
-//		user.setName("±è³ª¿µ");
+//		user.setName("ê¹€ë‚˜ì˜");
 //		user.setPassword("1234");
 //		
 //		dao.add(user);
 //		
-//		System.out.println(user.getId() + "µî·Ï ¼º°ø");
+//		System.out.println(user.getId() + "ë“±ë¡ ì„±ê³µ");
 //		
 //		User user2 = dao.get(user.getId());
-		//get()¸Ş¼Òµå°¡ ¿¡·¯°¡ ¾ø¾úÀ» »Ó, ¿øÇÏ´Â °á°ú¿´´ÂÁö Å×½ºÆ® ÇÏ´Â ÄÚµå´Â ¾Æ´Ï¾úÀ½
+		//get()ë©”ì†Œë“œê°€ ì—ëŸ¬ê°€ ì—†ì—ˆì„ ë¿, ì›í•˜ëŠ” ê²°ê³¼ì˜€ëŠ”ì§€ í…ŒìŠ¤íŠ¸ í•˜ëŠ” ì½”ë“œëŠ” ì•„ë‹ˆì—ˆìŒ
 //		System.out.println(user2.getName());
 //		System.out.println(user2.getPassword());
-//		System.out.println(user2.getId() + "Á¶È¸ ¼º°ø");
+//		System.out.println(user2.getId() + "ì¡°íšŒ ì„±ê³µ");
 		
 //		if(!user.getName().equals(user2.getName())) {
-//			System.out.println("Å×½ºÆ® ½ÇÆĞ(name)");
+//			System.out.println("í…ŒìŠ¤íŠ¸ ì‹¤íŒ¨(name)");
 //		}
 //		else if (!user.getPassword().equals(user2.getPassword())) {
-//			System.out.println("Å×½ºÆ® ½ÇÆĞ(password)");
+//			System.out.println("í…ŒìŠ¤íŠ¸ ì‹¤íŒ¨(password)");
 //		}
 //		else {
-//			System.out.println("Å×½ºÆ® ¼º°ø");
+//			System.out.println("í…ŒìŠ¤íŠ¸ ì„±ê³µ");
 //		}
 		
 		JUnitCore.main("com.springbook.practice.UserDaoTest");
 	}
 	
-//	@Autowired //ÄÁÅ×ÀÌ³Ê ¾øÀÌ DI Å×½ºÆ®¸¦ ÇÏ±â À§ÇØ¼­ ÁÖ¼®Ã³¸®µÊ
+//	@Autowired //ì»¨í…Œì´ë„ˆ ì—†ì´ DI í…ŒìŠ¤íŠ¸ë¥¼ í•˜ê¸° ìœ„í•´ì„œ ì£¼ì„ì²˜ë¦¬ë¨
 	private UserDAO dao;
 	private User user1;
 	private User user2;
 	private User user3;
 	
 	/*
-	 * ¾î¶² ºóÀÌµç ´Ù °¡Á®¿Ã ¼ö ÀÖ°í, ÇÒ´ç °¡´ÉÇÑ Å¸ÀÔÀ» °¡Áø ºóÀ» ÀÚµ¿À¸·Î Ã£±â ¶§¹®¿¡ Å¬·¡½º, ÀÎÅÍÆäÀÌ½º Å¸ÀÔ ¸ğµÎ °¡´ÉÇÔ
+	 * ì–´ë–¤ ë¹ˆì´ë“  ë‹¤ ê°€ì ¸ì˜¬ ìˆ˜ ìˆê³ , í• ë‹¹ ê°€ëŠ¥í•œ íƒ€ì…ì„ ê°€ì§„ ë¹ˆì„ ìë™ìœ¼ë¡œ ì°¾ê¸° ë•Œë¬¸ì— í´ë˜ìŠ¤, ì¸í„°í˜ì´ìŠ¤ íƒ€ì… ëª¨ë‘ ê°€ëŠ¥í•¨
 	 * @Autowired
 	 * SimpleDriverDataSource dataSource;
 	 */
 //	@Autowired
-//	private ApplicationContext context; //Å×½ºÆ® ¿ÀºêÁ§Æ®°¡ ¸¸µé¾îÁö¸é ÇØ´ç ÇÊµå¿¡ ÀÚµ¿À¸·Î ÁÖÀÔµÈ´Ù.
+//	private ApplicationContext context; //í…ŒìŠ¤íŠ¸ ì˜¤ë¸Œì íŠ¸ê°€ ë§Œë“¤ì–´ì§€ë©´ í•´ë‹¹ í•„ë“œì— ìë™ìœ¼ë¡œ ì£¼ì…ëœë‹¤.
 	
-	//JUnit Å×½ºÆ® ¸Ş¼Òµå Àû¿ëÇÏ±â
+	//JUnit í…ŒìŠ¤íŠ¸ ë©”ì†Œë“œ ì ìš©í•˜ê¸°
 	
-	//¹İº¹µÇ´Â ÀÛ¾÷À» º°µµÀÇ ¸Ş¼Òµå·Î ¿Å±è
+	//ë°˜ë³µë˜ëŠ” ì‘ì—…ì„ ë³„ë„ì˜ ë©”ì†Œë“œë¡œ ì˜®ê¹€
 	@Before
 	public void setUp() {
 //		this.dao = context.getBean("userDAO", UserDAO.class);
@@ -103,7 +103,7 @@ public class UserDaoTestBackup {
 		this.user2 = new User("wronggim2", "nyk2", "1234");
 		this.user3 = new User("wronggim3", "nyk3", "1234");
 		
-		//Å×½ºÆ®¿¡¼­ userdao°¡ »ç¿ëÇÒ ¿ÀºêÁ§Æ®¸¦ Á÷Á¢ »ı¼ºÇÔ(ºñÃß)
+		//í…ŒìŠ¤íŠ¸ì—ì„œ userdaoê°€ ì‚¬ìš©í•  ì˜¤ë¸Œì íŠ¸ë¥¼ ì§ì ‘ ìƒì„±í•¨(ë¹„ì¶”)
 //		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
 		
 //		dao = new UserDAO();
@@ -120,7 +120,7 @@ public class UserDaoTestBackup {
 		dao.add(user2);
 		assertThat(dao.getCount(), is(2));
 		
-		//Á¤¸»·Î addµÈ °ªÀ» ±×´ë·Î °¡Á®¿Â°ÍÀÏ±î? ¿¡ ´ëÇÑ Å×½ºÆ®
+		//ì •ë§ë¡œ addëœ ê°’ì„ ê·¸ëŒ€ë¡œ ê°€ì ¸ì˜¨ê²ƒì¼ê¹Œ? ì— ëŒ€í•œ í…ŒìŠ¤íŠ¸
 		User userget1 = dao.get(user1.getId());
 		assertThat(userget1.getName(), is(user1.getName()));
 		assertThat(userget1.getPassword(), is(user1.getPassword()));
@@ -129,7 +129,7 @@ public class UserDaoTestBackup {
 		assertThat(userget2.getName(), is(user2.getName()));
 		assertThat(userget2.getPassword(), is(user2.getPassword()));
 	}
-	//ÇÏ³ªÀÇ Å×½ºÆ®´Â ÇÏ³ªÀÇ ±â´É¸¸ °ËÁõÇØ¾ßÇÑ´Ù
+	//í•˜ë‚˜ì˜ í…ŒìŠ¤íŠ¸ëŠ” í•˜ë‚˜ì˜ ê¸°ëŠ¥ë§Œ ê²€ì¦í•´ì•¼í•œë‹¤
 	@Test
 	public void count() throws SQLException, ClassNotFoundException {
 		
@@ -143,13 +143,13 @@ public class UserDaoTestBackup {
 		dao.add(user3);
 		assertThat(dao.getCount(), is(3));
 	}
-	//°ªÀÌ ¾øÀ» ¶§ ¿¹¿Ü°¡ ¹ß»ıÇÏ´Â Å×½ºÆ®
+	//ê°’ì´ ì—†ì„ ë•Œ ì˜ˆì™¸ê°€ ë°œìƒí•˜ëŠ” í…ŒìŠ¤íŠ¸
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void getUserFailure() throws SQLException, ClassNotFoundException {
 		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
-		//get¿¡ ´ëÇÑ ¿¹¿Ü°¡ ¹ß»ıÇÏ±â ¶§¹®¿¡, userdao¿¡¼­ getÀ» ¼öÁ¤ÇØÁÖ¾î¾ß ÇÑ´Ù.
-		dao.get("¾ø´Â ID");
+		//getì— ëŒ€í•œ ì˜ˆì™¸ê°€ ë°œìƒí•˜ê¸° ë•Œë¬¸ì—, userdaoì—ì„œ getì„ ìˆ˜ì •í•´ì£¼ì–´ì•¼ í•œë‹¤.
+		dao.get("ì—†ëŠ” ID");
 	}
 }

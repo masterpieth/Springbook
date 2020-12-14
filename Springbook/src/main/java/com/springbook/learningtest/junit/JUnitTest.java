@@ -25,21 +25,21 @@ public class JUnitTest {
 	@Autowired
 	ApplicationContext context;
 	
-	//ÇÏ³ª¸¸ °¡Áö°í µ¹¸®´Â °æ¿ì¿¡´Â Á÷Àü¿¡ »ı¼ºµÈ ¿ÀºêÁ§Æ®¶û¸¸ ºñ±³ÇÏ±â ¶§¹®¿¡ ÀûÀıÇÏÁö ¾ÊÀ½.
+	//í•˜ë‚˜ë§Œ ê°€ì§€ê³  ëŒë¦¬ëŠ” ê²½ìš°ì—ëŠ” ì§ì „ì— ìƒì„±ëœ ì˜¤ë¸Œì íŠ¸ë‘ë§Œ ë¹„êµí•˜ê¸° ë•Œë¬¸ì— ì ì ˆí•˜ì§€ ì•ŠìŒ.
 //	static JUnitTest testObj;
 	static Set<JUnitTest> testobjs = new HashSet<JUnitTest>();
 	static ApplicationContext contextObj = null;
 	
-	//JUnitÀº Á¤¸»·Î Å×½ºÆ® ¿ÀºêÁ§Æ®¸¦ ¸Å¹ø ¸¸µé¾î¼­ ÇÏ´Â°É±î? ¿¡ ´ëÇÑ Å×½ºÆ®
+	//JUnitì€ ì •ë§ë¡œ í…ŒìŠ¤íŠ¸ ì˜¤ë¸Œì íŠ¸ë¥¼ ë§¤ë²ˆ ë§Œë“¤ì–´ì„œ í•˜ëŠ”ê±¸ê¹Œ? ì— ëŒ€í•œ í…ŒìŠ¤íŠ¸
 	@Test 
 	public void test1() {
-						//°°Áö ¾Ê¾Æ¾ß ¼º°øÇÔ
+						//ê°™ì§€ ì•Šì•„ì•¼ ì„±ê³µí•¨
 //		assertThat(this, is(not(sameInstance(testObj))));
 //		testObj = this;
 		assertThat(testobjs, not(hasItem(this)));
 		testobjs.add(this);
 		
-		//Ã¹ Å×½ºÆ®¿¡¼­´Â null, Ã¹ Å×½ºÆ®¿¡¼­ ¸¸µé¾îÁø ÄÁÅØ½ºÆ®¸¦ º¯¼ö¿¡ ÀúÀåÇÔ
+		//ì²« í…ŒìŠ¤íŠ¸ì—ì„œëŠ” null, ì²« í…ŒìŠ¤íŠ¸ì—ì„œ ë§Œë“¤ì–´ì§„ ì»¨í…ìŠ¤íŠ¸ë¥¼ ë³€ìˆ˜ì— ì €ì¥í•¨
 		assertThat(contextObj == null || contextObj == this.context, is(true));
 		contextObj = this.context;
 	}
@@ -65,3 +65,4 @@ public class JUnitTest {
 		contextObj = this.context;
 	}
 }
+

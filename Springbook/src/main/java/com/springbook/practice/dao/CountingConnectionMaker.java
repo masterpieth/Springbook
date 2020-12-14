@@ -14,9 +14,9 @@ public class CountingConnectionMaker implements ConnectionMaker{
 
 	@Override
 	public Connection makeConnection() throws ClassNotFoundException, SQLException {
-		//makeConnectioÇÒ ¶§ Ä«¿îÅÍ¸¦ Áõ°¡½ÃÅ´
+		//makeConnectioí•  ë•Œ ì¹´ìš´í„°ë¥¼ ì¦ê°€ì‹œí‚´
 		this.counter++;
-		//Áõ°¡½ÃÅ°°í ³­ ´ÙÀ½¿¡ connectionMaker ¿ÀºêÁ§Æ®¸¦ µ¹·ÁÁÜ(db Ä¿³Ø¼ÇÀ» ÁÖ±ä ÇØ¾ß µ¿ÀÛÇÏ´Ï±î)
+		//ì¦ê°€ì‹œí‚¤ê³  ë‚œ ë‹¤ìŒì— connectionMaker ì˜¤ë¸Œì íŠ¸ë¥¼ ëŒë ¤ì¤Œ(db ì»¤ë„¥ì…˜ì„ ì£¼ê¸´ í•´ì•¼ ë™ì‘í•˜ë‹ˆê¹Œ)
 		return realConnectionMaker.makeConnection();
 	}
 	public int getCounter () {

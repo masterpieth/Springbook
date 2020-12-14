@@ -8,17 +8,17 @@ public class CountingDaoFactory {
 
 //	@Bean
 //	public UserDAO userDAO() {
-//		//¸ğµç DAO´Â °á±¹ DconnctionMaker¸¦ DI¹Ş´Âµ¥, ±× Áß°£´Ù¸®¿¡ CountingConnectionMaker°¡ ²¼À½
+//		//ëª¨ë“  DAOëŠ” ê²°êµ­ DconnctionMakerë¥¼ DIë°›ëŠ”ë°, ê·¸ ì¤‘ê°„ë‹¤ë¦¬ì— CountingConnectionMakerê°€ ê¼ˆìŒ
 ////		return new UserDAO(connectionMaker());
 //		
-//		//»ı¼ºÀÚ¸¦ ÅëÇØ ÁÖÀÔÇÏµµ·Ï ¹Ù²Û °æ¿ì
+//		//ìƒì„±ìë¥¼ í†µí•´ ì£¼ì…í•˜ë„ë¡ ë°”ê¾¼ ê²½ìš°
 //		UserDAO userDAO = new UserDAO();
 //		userDAO.setConnectionMaker(connectionMaker());
 //		
 //		return userDAO;
 //	}
 	
-	//xml ·Î º¯È¯ÇÏ´Â °æ¿ì
+	//xml ë¡œ ë³€í™˜í•˜ëŠ” ê²½ìš°
 	@Bean //<bean
 	public ConnectionMaker connectionMaker() { //id="connectionMaker"
 		return new CountingConnectionMaker(realConnectionMaker()); //class="com.springbook.practice.dao.CountingConnectionMaker" />

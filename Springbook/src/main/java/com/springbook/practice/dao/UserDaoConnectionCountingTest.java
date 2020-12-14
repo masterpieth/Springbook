@@ -12,14 +12,14 @@ public class UserDaoConnectionCountingTest {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
 		UserDAO dao = context.getBean("userDAO", UserDAO.class);
 		
-		//DAO »ç¿ë ÀÌÈÄ~
+		//DAO ì‚¬ìš© ì´í›„~
 		User user = new User();
 		user.setId("wronggim");
-		user.setName("±è³ª¿µ");
+		user.setName("ê¹€ë‚˜ì˜");
 		user.setPassword("1234");
 		
 		dao.add(user);
-		//°á°ú È®ÀÎ
+		//ê²°ê³¼ í™•ì¸
 		CountingConnectionMaker ccm = context.getBean("connectionMaker", CountingConnectionMaker.class);
 		System.out.println("Connection counter : " + ccm.getCounter());
 	}
