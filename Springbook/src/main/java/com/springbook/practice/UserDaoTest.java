@@ -3,6 +3,8 @@ package com.springbook.practice;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -23,11 +25,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
 
-@RunWith(SpringJUnit4ClassRunner.class) 
-@ContextConfiguration(locations = "/applicationContext.xml")
+
 public class UserDaoTest {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		
 		JUnitCore.main("com.springbook.practice.UserDaoTest");
 	}
 	
@@ -41,6 +41,13 @@ public class UserDaoTest {
 		this.user1 = new User("wronggim1", "nyk1", "1234");
 		this.user2 = new User("wronggim2", "nyk2", "1234");
 		this.user3 = new User("wronggim3", "nyk3", "1234");
+		dao = new UserDAO() {
+			
+			@Override
+			protected PreparedStatement makeStatement(Connection c) throws SQLException {
+				return null;
+			}
+		};
 		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
 		dao.setDataSource(dataSource);
 	}

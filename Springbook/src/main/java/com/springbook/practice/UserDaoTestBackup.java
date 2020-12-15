@@ -18,9 +18,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
 
-@RunWith(SpringJUnit4ClassRunner.class) //스프링의 테스트 컨텍스트 프레임워크의 JUnit 확장기능 지정
 //@ContextConfiguration(locations = "/applicationContext.xml") //테스트 컨텍스트가 자동으로 만들어줄 애플리케이션 컨텍스트의 위치 지정
 //@DirtiesContext // 테스트 메소드에서 애플리케이션 컨텍스트의 구성이나 상태를 변경한다는 것을 컨텍스트 프레임워크에 알려줌
+@RunWith(SpringJUnit4ClassRunner.class) //스프링의 테스트 컨텍스트 프레임워크의 JUnit 확장기능 지정
 //@ContextConfiguration(locations = "/test-applicationContext.xml") //테스트시에는 테스트용 설정파일을 사용함
 public class UserDaoTestBackup {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
