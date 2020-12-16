@@ -4,18 +4,22 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 <!-- 	<bean id="connectionMaker" class="com.springbook.practice.dao.DConnectionMaker"/> -->
-
+	
+	<bean id="userDAO" class="com.springbook.practice.dao.UserDAO">
+<!-- 		<property name="connectionMaker" ref="connectionMaker"/> -->
+		<property name="dataSource" ref="dataSource"/>
+		<property name="jdbcContext" ref="jdbcContext"/>
+	</bean>
+	
+	<bean id="jdbcContext" class="com.springbook.practice.dao.JdbcContext">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
 		<property name="url" value="jdbc:mysql://127.0.0.1/springbook"/>
 		<property name="username" value="root"/>
 		<property name="password" value="1234"/>
 	</bean>
-	
-	<bean id="userDAO" class="com.springbook.practice.dao.UserDAO">
-<!-- 		<property name="connectionMaker" ref="connectionMaker"/> -->
-		<property name="dataSource" ref="dataSource"/>
-	</bean>
-		
 </beans>
 

@@ -16,24 +16,28 @@ import com.springbook.practice.domain.User;
 public abstract class UserDAO {
 	
 	private DataSource dataSource;
+	private JdbcContext jdbcContext;
 	
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 	
+	public void setJdbcContext(JdbcContext jdbcContext) {
+		this.jdbcContext = jdbcContext;
+	}
+	
 	public void add(final User user) throws ClassNotFoundException, SQLException {
-		class AddStatement implements StatementStrategy{
-			@Override
-			public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-				PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
-				ps.setString(1, user.getId());
-				ps.setString(2, user.getName());
-				ps.setString(3, user.getPassword());
-				return ps;
+		this.jdbcContext.workWithStatementStrategy(
+			new StatementStrategy() {
+				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+					PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
+					ps.setString(1, user.getId());
+					ps.setString(2, user.getName());
+					ps.setString(3, user.getPassword());
+					return ps;
+				}
 			}
-		}
-		StatementStrategy st = new AddStatement();
-		jdbcContextWithStatmentStrategy(st);
+		);
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
@@ -62,33 +66,14 @@ public abstract class UserDAO {
 	}
 	
 	public void deleteAll() throws SQLException {
-		StatementStrategy st = new DeleteAllStatement();
-		jdbcContextWithStatmentStrategy(st);
-	}
-	public void jdbcContextWithStatmentStrategy(StatementStrategy stmt) throws SQLException{
-		Connection c = null;
-		PreparedStatement ps = null;
-		
-		try {
-			c = dataSource.getConnection();
-			ps = stmt.makePreparedStatement(c);
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			if(ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
+		this.jdbcContext.workWithStatementStrategy(
+			new StatementStrategy() {
+				
+				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+					return c.prepareStatement("delete from users");
 				}
 			}
-			if(c != null) {
-				try {
-					c.close();
-				} catch (SQLException e) {
-				}
-			}
-		}
+		);
 	}
 	public int getCount() throws SQLException {
 		Connection c = null;

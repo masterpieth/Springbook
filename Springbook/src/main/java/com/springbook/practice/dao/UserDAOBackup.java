@@ -20,6 +20,12 @@ public abstract class UserDAOBackup {
 	//datasource 사용
 	private DataSource dataSource;
 	
+	private JdbcContext jdbcContext;
+	
+	public void setJdbcContext(JdbcContext jdbcContext) {
+		this.jdbcContext = jdbcContext;
+	}
+	
 	//생성자를 통해서 주입받는 방법
 //	public UserDAO(ConnectionMaker connectionMaker) {
 ////		simpleConnectionMaker = new SimpleConnectionMaker();
@@ -32,7 +38,7 @@ public abstract class UserDAOBackup {
 //		 */
 //		this.connectionMaker = connectionMaker;
 //	}
-	
+
 	//수정자를 통해서 주입받는 방법
 	public void setConnectionMaker(ConnectionMaker connectionMaker) {
 		this.connectionMaker = connectionMaker;
@@ -46,18 +52,18 @@ public abstract class UserDAOBackup {
 	//로컬 클래스에서 외부변수를 사용할 때는 final로 선언해줘야함
 	public void add(final User user) throws ClassNotFoundException, SQLException {
 		//로컬 클래스의 사용
-		class AddStatement implements StatementStrategy{
-			@Override
-			public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-				PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
-				
-				//로컬 클래스로 선언되었으므로 필드에 직접 접근이 가능함-> 생성자를 통해 주입시키지 않아도 됨
-				ps.setString(1, user.getId());
-				ps.setString(2, user.getName());
-				ps.setString(3, user.getPassword());
-				return ps;
-			}
-		}
+//		class AddStatement implements StatementStrategy{
+//			@Override
+//			public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+//				PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
+//				
+//				//로컬 클래스로 선언되었으므로 필드에 직접 접근이 가능함-> 생성자를 통해 주입시키지 않아도 됨
+//				ps.setString(1, user.getId());
+//				ps.setString(2, user.getName());
+//				ps.setString(3, user.getPassword());
+//				return ps;
+//			}
+//		}
 //		Connection c = connectionMaker.makeConnection(); //인터페이스에 정의된 메소드를 사용하므로, 클래스가 바뀐다고 해도 메소드 이름이 변경되지 않음
 //		Connection c = dataSource.getConnection();
 //		
@@ -72,8 +78,40 @@ public abstract class UserDAOBackup {
 //		c.close();
 		
 		//전략 패턴을 사용한 메소드 분리
-		StatementStrategy st = new AddStatement();
-		jdbcContextWithStatmentStrategy(st);
+		//익명 클래스의 사용
+//		StatementStrategy st = new StatementStrategy() {
+//			public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+//				PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
+//				ps.setString(1, user.getId());
+//				ps.setString(2, user.getName());
+//				ps.setString(3, user.getPassword());
+//				return ps;
+//			}
+//		};
+		//익명 클래스를 사용했기 때문에 굳이 오브젝트를 형성할 필요가 없음, 바로 메소드 내에서 사용할 수 있게 함
+//		jdbcContextWithStatmentStrategy(
+//			new StatementStrategy() {
+//				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+//					PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
+//					ps.setString(1, user.getId());
+//					ps.setString(2, user.getName());
+//					ps.setString(3, user.getPassword());
+//					return ps;
+//				}
+//			}
+//		);
+		//DI받은 컨텍스트 메소드를 사용함
+		this.jdbcContext.workWithStatementStrategy(
+			new StatementStrategy() {
+				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+					PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
+					ps.setString(1, user.getId());
+					ps.setString(2, user.getName());
+					ps.setString(3, user.getPassword());
+					return ps;
+				}
+			}
+		);
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
@@ -118,8 +156,25 @@ public abstract class UserDAOBackup {
 	}
 	
 	public void deleteAll() throws SQLException {
-		StatementStrategy st = new DeleteAllStatement();
-		jdbcContextWithStatmentStrategy(st);
+//		StatementStrategy st = new DeleteAllStatement();
+//		jdbcContextWithStatmentStrategy(st);
+		
+		//익명 클래스를 사용해서 파라미터에 전달
+//		jdbcContextWithStatmentStrategy(
+//			new StatementStrategy() {
+//				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+//					return c.prepareStatement("delete from users");
+//				}
+//			}
+//		);
+		//DI받은 컨텍스트 메소드를 사용함
+		this.jdbcContext.workWithStatementStrategy(
+			new StatementStrategy() {
+				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+					return c.prepareStatement("delete from users");
+				}
+			}
+		);
 	}
 	public void jdbcContextWithStatmentStrategy(StatementStrategy stmt) throws SQLException{
 		Connection c = null;
