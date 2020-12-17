@@ -22,6 +22,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.springbook.practice.dao.JdbcContext;
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
 

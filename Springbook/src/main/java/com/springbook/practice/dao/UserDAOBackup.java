@@ -45,7 +45,10 @@ public abstract class UserDAOBackup {
 	}
 	
 	//dataSource사용
+	//201217 JdbcContext 생성, DI를 동시에 수행하게 만듦
 	public void setDataSource(DataSource dataSource) {
+		this.jdbcContext = new JdbcContext();
+		this.jdbcContext.setDataSource(dataSource);
 		this.dataSource = dataSource;
 	}
 	

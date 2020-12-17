@@ -19,11 +19,9 @@ public abstract class UserDAO {
 	private JdbcContext jdbcContext;
 	
 	public void setDataSource(DataSource dataSource) {
+		this.jdbcContext = new JdbcContext();
+		this.jdbcContext.setDataSource(dataSource);
 		this.dataSource = dataSource;
-	}
-	
-	public void setJdbcContext(JdbcContext jdbcContext) {
-		this.jdbcContext = jdbcContext;
 	}
 	
 	public void add(final User user) throws ClassNotFoundException, SQLException {
@@ -90,24 +88,8 @@ public abstract class UserDAO {
 		} catch (SQLException e) {
 			throw e;
 		} finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-				}
-			}
-			if(ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-				}
-			}
-			if(c != null) {
-				try {
-					c.close();
-				} catch (SQLException e) {
-				}
-			}
+			if(ps != null) { try { ps.close(); } catch (SQLException e) {}}
+			if(c != null) { try { c.close(); } catch (SQLException e) {}}
 		}
 	}
 	abstract protected PreparedStatement makeStatement(Connection c) throws SQLException;
