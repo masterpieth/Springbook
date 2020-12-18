@@ -103,8 +103,9 @@ public abstract class UserDAOBackup {
 //				}
 //			}
 //		);
-		//DI받은 컨텍스트 메소드를 사용함
+		//DI받은 컨텍스트 메소드를 사용함->템플릿
 		this.jdbcContext.workWithStatementStrategy(
+				//콜백 오브젝트 생성->템플릿에 매개로 넘겨줌(콜백의 메소드를 실행함)
 			new StatementStrategy() {
 				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
 					PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
@@ -161,7 +162,6 @@ public abstract class UserDAOBackup {
 	public void deleteAll() throws SQLException {
 //		StatementStrategy st = new DeleteAllStatement();
 //		jdbcContextWithStatmentStrategy(st);
-		
 		//익명 클래스를 사용해서 파라미터에 전달
 //		jdbcContextWithStatmentStrategy(
 //			new StatementStrategy() {
@@ -171,13 +171,19 @@ public abstract class UserDAOBackup {
 //			}
 //		);
 		//DI받은 컨텍스트 메소드를 사용함
-		this.jdbcContext.workWithStatementStrategy(
-			new StatementStrategy() {
-				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-					return c.prepareStatement("delete from users");
-				}
-			}
-		);
+//		this.jdbcContext.workWithStatementStrategy(
+//			new StatementStrategy() {
+//				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+//					//sql 문장 외에는 변하지 않음
+//					return c.prepareStatement("delete from users");
+//				}
+//			}
+//		);
+		
+		//고정되어있는 부분을 메소드로 분리함
+//		executeSql("delete from users");
+		//컨텍스트로 옮긴 콜백사용
+		this.jdbcContext.executeSql("delete from users");
 	}
 	public void jdbcContextWithStatmentStrategy(StatementStrategy stmt) throws SQLException{
 		Connection c = null;
@@ -240,6 +246,15 @@ public abstract class UserDAOBackup {
 				}
 			}
 		}
+	}
+	private void executeSql(final String query) throws SQLException {
+		this.jdbcContext.workWithStatementStrategy(
+				new StatementStrategy() {
+					public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+						return c.prepareStatement(query);
+					}
+				}
+			);
 	}
 	abstract protected PreparedStatement makeStatement(Connection c) throws SQLException ;
 }
