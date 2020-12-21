@@ -3,6 +3,7 @@ package com.springbook.practice.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
@@ -35,6 +36,19 @@ public class JdbcContext {
 				new StatementStrategy() {
 					public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
 						return c.prepareStatement(query);
+					}
+				}
+			);
+	}
+	public void executeSql(final String query, final ArrayList<String> list) throws SQLException {
+		workWithStatementStrategy(
+				new StatementStrategy() {
+					public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+						PreparedStatement ps = c.prepareStatement(query);
+						for(int i = 0; i < list.size(); i++) {
+							ps.setString(i+1, list.get(i));
+						}
+						return ps;
 					}
 				}
 			);

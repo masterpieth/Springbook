@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
@@ -25,17 +26,13 @@ public abstract class UserDAO {
 	}
 	
 	public void add(final User user) throws ClassNotFoundException, SQLException {
-		this.jdbcContext.workWithStatementStrategy(
-			new StatementStrategy() {
-				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-					PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
-					ps.setString(1, user.getId());
-					ps.setString(2, user.getName());
-					ps.setString(3, user.getPassword());
-					return ps;
-				}
-			}
-		);
+		ArrayList<String> querys = new ArrayList<String>();
+		
+		querys.add(user.getId());
+		querys.add(user.getName());
+		querys.add(user.getPassword());
+		
+		this.jdbcContext.executeSql("insert into users values(?,?,?)",querys);
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
