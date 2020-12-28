@@ -7,7 +7,11 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.springbook.practice.domain.User;
 
@@ -20,11 +24,12 @@ public abstract class UserDAOBackup {
 	//datasource 사용
 	private DataSource dataSource;
 	
-	private JdbcContext jdbcContext;
+	private JdbcTemplate jdbcTemplate;
+//	private JdbcContext jdbcContext;
 	
-	public void setJdbcContext(JdbcContext jdbcContext) {
-		this.jdbcContext = jdbcContext;
-	}
+//	public void setJdbcContext(JdbcContext jdbcContext) {
+//		this.jdbcContext = jdbcContext;
+//	}
 	
 	//생성자를 통해서 주입받는 방법
 //	public UserDAO(ConnectionMaker connectionMaker) {
@@ -47,8 +52,9 @@ public abstract class UserDAOBackup {
 	//dataSource사용
 	//201217 JdbcContext 생성, DI를 동시에 수행하게 만듦
 	public void setDataSource(DataSource dataSource) {
-		this.jdbcContext = new JdbcContext();
-		this.jdbcContext.setDataSource(dataSource);
+//		this.jdbcContext = new JdbcContext();
+//		this.jdbcContext.setDataSource(dataSource);
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		this.dataSource = dataSource;
 	}
 	
@@ -104,18 +110,21 @@ public abstract class UserDAOBackup {
 //			}
 //		);
 		//DI받은 컨텍스트 메소드를 사용함->템플릿
-		this.jdbcContext.workWithStatementStrategy(
-				//콜백 오브젝트 생성->템플릿에 매개로 넘겨줌(콜백의 메소드를 실행함)
-			new StatementStrategy() {
-				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-					PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
-					ps.setString(1, user.getId());
-					ps.setString(2, user.getName());
-					ps.setString(3, user.getPassword());
-					return ps;
-				}
-			}
-		);
+//		this.jdbcContext.workWithStatementStrategy(
+//				//콜백 오브젝트 생성->템플릿에 매개로 넘겨줌(콜백의 메소드를 실행함)
+//			new StatementStrategy() {
+//				public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+//					PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values (?,?,?)");
+//					ps.setString(1, user.getId());
+//					ps.setString(2, user.getName());
+//					ps.setString(3, user.getPassword());
+//					return ps;
+//				}
+//			}
+//		);
+//		jdbcTemplate사용하는 방법
+		this.jdbcTemplate.update("insert into users(id, name, password) values(?,?,?)", 
+				user.getId(), user.getName(), user.getPassword()); 
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
@@ -183,7 +192,18 @@ public abstract class UserDAOBackup {
 		//고정되어있는 부분을 메소드로 분리함
 //		executeSql("delete from users");
 		//컨텍스트로 옮긴 콜백사용
-		this.jdbcContext.executeSql("delete from users");
+//		this.jdbcContext.executeSql("delete from users");
+		
+		//jdbcTemplate사용 1) 콜백 패턴 사용하는 메소드
+//		this.jdbcTemplate.update(new PreparedStatementCreator() {
+//			
+//			@Override
+//			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+//				return con.prepareStatement("delete from users");
+//			}
+//		});
+//		2) sql문만 사용하는 메소드
+		this.jdbcTemplate.update("delete from users");
 	}
 	public void jdbcContextWithStatmentStrategy(StatementStrategy stmt) throws SQLException{
 		Connection c = null;
@@ -211,50 +231,64 @@ public abstract class UserDAOBackup {
 		}
 	}
 	public int getCount() throws SQLException {
-		Connection c = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			c = dataSource.getConnection();
-			ps = c.prepareStatement("select count(*) from users");
-			
-			//resultset에서도 sqlexception이 발생할 수 있으므로, try 블록 안에 있어야함
-			rs = ps.executeQuery();
-			rs.next();
-			return rs.getInt(1);
-			
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			//resultset에 대한 예외처리
-			if(rs != null) {
-				try {
-					rs.close(); //close()의 경우, 만들어진순서의 반대로 하는 것이 원칙
-				} catch (SQLException e) {
-				}
-			}
-			if(ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-				}
-			}
-			if(c != null) {
-				try {
-					c.close();
-				} catch (SQLException e) {
-				}
-			}
-		}
+//		Connection c = null;
+//		PreparedStatement ps = null;
+//		ResultSet rs = null;
+//		try {
+//			c = dataSource.getConnection();
+//			ps = c.prepareStatement("select count(*) from users");
+//			
+//			//resultset에서도 sqlexception이 발생할 수 있으므로, try 블록 안에 있어야함
+//			rs = ps.executeQuery();
+//			rs.next();
+//			return rs.getInt(1);
+//			
+//		} catch (SQLException e) {
+//			throw e;
+//		} finally {
+//			//resultset에 대한 예외처리
+//			if(rs != null) {
+//				try {
+//					rs.close(); //close()의 경우, 만들어진순서의 반대로 하는 것이 원칙
+//				} catch (SQLException e) {
+//				}
+//			}
+//			if(ps != null) {
+//				try {
+//					ps.close();
+//				} catch (SQLException e) {
+//				}
+//			}
+//			if(c != null) {
+//				try {
+//					c.close();
+//				} catch (SQLException e) {
+//				}
+//			}
+//		}
+//		jdbcTemplate 사용 1) 콜백 패턴 메소드
+//		return this.jdbcTemplate.query(new PreparedStatementCreator() {
+//			@Override
+//			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+//				return con.prepareStatement("select count(*) from users");
+//			}
+//		}, new ResultSetExtractor<Integer>() {
+//			public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+//				rs.next();
+//				return rs.getInt(1);
+//			}
+//		});
+//		2) query만 사용하는 메소드
+		return this.jdbcTemplate.queryForInt("select count(*) from users");
 	}
-	private void executeSql(final String query) throws SQLException {
-		this.jdbcContext.workWithStatementStrategy(
-				new StatementStrategy() {
-					public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-						return c.prepareStatement(query);
-					}
-				}
-			);
-	}
+//	private void executeSql(final String query) throws SQLException {
+//		this.jdbcContext.workWithStatementStrategy(
+//				new StatementStrategy() {
+//					public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+//						return c.prepareStatement(query);
+//					}
+//				}
+//			);
+//	}
 	abstract protected PreparedStatement makeStatement(Connection c) throws SQLException ;
 }

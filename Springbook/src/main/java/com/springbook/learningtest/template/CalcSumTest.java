@@ -18,7 +18,6 @@ public class CalcSumTest {
 		this.calculator = new Calcuator();
 		this.numFilepath = getClass().getResource("/numbers.txt").getPath();
 	}
-	
 	@Test
 	public void sumOfNumbers() throws IOException {
 		assertThat(calculator.calcSum(this.numFilepath), is(10));
