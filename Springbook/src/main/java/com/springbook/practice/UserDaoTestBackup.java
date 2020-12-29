@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -151,5 +152,35 @@ public class UserDaoTestBackup {
 		assertThat(dao.getCount(), is(0));
 		//get에 대한 예외가 발생하기 때문에, userdao에서 get을 수정해주어야 한다.
 		dao.get("없는 ID");
+	}
+	
+	@Test
+	public void getAll() throws SQLException, ClassNotFoundException {
+		dao.deleteAll();
+		
+		dao.add(user1);
+		List<User> users1 = dao.getAll();
+		assertThat(users1.size(), is(1));
+		checkSameUser(user1, users1.get(0));
+		
+		dao.add(user2);
+		List<User> users2 = dao.getAll();
+		assertThat(users2.size(), is(2));
+		checkSameUser(user1, users2.get(0));
+		checkSameUser(user2, users2.get(1));
+		
+		dao.add(user3);
+		List<User> users3 = dao.getAll();
+		assertThat(users3.size(), is(3));
+		checkSameUser(user1, users3.get(0)); //id 순으로 들어갈 것이므로 순서대로 맞아야함
+		checkSameUser(user2, users3.get(1));
+		checkSameUser(user3, users3.get(2));
+	}
+	
+	//User 오브젝트의 내용을 비교, 중복되는 메소드라 따로 분리됨
+	private void checkSameUser(User user1, User user2) {
+		assertThat(user1.getId(), is(user2.getId()));
+		assertThat(user1.getName(), is(user2.getName()));
+		assertThat(user1.getPassword(), is(user2.getPassword()));
 	}
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -12,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.springbook.practice.domain.User;
 
@@ -127,16 +129,17 @@ public abstract class UserDAOBackup {
 				user.getId(), user.getName(), user.getPassword()); 
 	}
 	
-	public User get(String id) throws ClassNotFoundException, SQLException {
+//	public User get(String id) throws ClassNotFoundException, SQLException{
+	public User get(String id) {
 		
 //		Connection c = connectionMaker.makeConnection();
 //		this.c = connectionMaker.makeConnection();
-		Connection c = dataSource.getConnection();
-		
-		PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
-		ps.setString(1, id);
-		
-		ResultSet rs = ps.executeQuery();
+//		Connection c = dataSource.getConnection();
+//		
+//		PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
+//		ps.setString(1, id);
+//		
+//		ResultSet rs = ps.executeQuery();
 //		rs.next();
 //		User user = new User();
 //		user.setId(rs.getString("id"));
@@ -149,23 +152,35 @@ public abstract class UserDAOBackup {
 //		this.user.setPassword(rs.getString("password"));
 		
 		//값이 없는 경우를 위한 예외처리
-		User user = null;
-		if(rs.next()) {
-			//결과가 있으면 값을 세팅함
-			user = new User();
-			user.setId(rs.getString("id"));
-			user.setName(rs.getString("name"));
-			user.setPassword(rs.getString("password"));
-		}
-		
-		rs.close();
-		ps.close();
-		c.close();
-		
-		//결과가 없으면 예외를 발생시킨다.
-		if(user == null) throw new EmptyResultDataAccessException(1);
-		
-		return user;
+//		User user = null;
+//		if(rs.next()) {
+//			//결과가 있으면 값을 세팅함
+//			user = new User();
+//			user.setId(rs.getString("id"));
+//			user.setName(rs.getString("name"));
+//			user.setPassword(rs.getString("password"));
+//		}
+//		
+//		rs.close();
+//		ps.close();
+//		c.close();
+//		
+//		//결과가 없으면 예외를 발생시킨다.
+//		if(user == null) throw new EmptyResultDataAccessException(1);
+//		
+//		return user;
+		//rowMapper를 사용한 콜백 활용
+		return this.jdbcTemplate.queryForObject("select * from users where id=?", 
+				new Object[] {id}, //SQL에 바인딩한 파라미터 값, 가변인자 대신 배열을 사용함
+				new RowMapper<User>() { //RowMapper 콜백
+					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+						User user = new User();
+						user.setId(rs.getString("id"));
+						user.setName(rs.getString("name"));
+						user.setPassword(rs.getString("password"));
+						return user;
+				}
+		});
 	}
 	
 	public void deleteAll() throws SQLException {
@@ -280,6 +295,19 @@ public abstract class UserDAOBackup {
 //		});
 //		2) query만 사용하는 메소드
 		return this.jdbcTemplate.queryForInt("select count(*) from users");
+	}
+	
+	public List<User> getAll() {
+		return this.jdbcTemplate.query("select * from users order by id", 
+			new RowMapper<User>() {
+				public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+					User user = new User();
+					user.setId(rs.getString("id"));
+					user.setName(rs.getString("name"));
+					user.setPassword(rs.getString("password"));
+					return user;
+				}
+		});
 	}
 //	private void executeSql(final String query) throws SQLException {
 //		this.jdbcContext.workWithStatementStrategy(
