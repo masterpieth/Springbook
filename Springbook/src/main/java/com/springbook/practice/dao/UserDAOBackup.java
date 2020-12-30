@@ -24,7 +24,7 @@ public abstract class UserDAOBackup {
 	private User user;
 	
 	//datasource 사용
-	private DataSource dataSource;
+//	private DataSource dataSource;
 	
 	private JdbcTemplate jdbcTemplate;
 //	private JdbcContext jdbcContext;
@@ -32,6 +32,16 @@ public abstract class UserDAOBackup {
 //	public void setJdbcContext(JdbcContext jdbcContext) {
 //		this.jdbcContext = jdbcContext;
 //	}
+	
+	private RowMapper<User> userMapper = new RowMapper<User>() {
+		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+			User user = new User();
+			user.setId(rs.getString("id"));
+			user.setName(rs.getString("name"));
+			user.setPassword(rs.getString("password"));
+			return user;
+		}
+	};
 	
 	//생성자를 통해서 주입받는 방법
 //	public UserDAO(ConnectionMaker connectionMaker) {
@@ -57,7 +67,7 @@ public abstract class UserDAOBackup {
 //		this.jdbcContext = new JdbcContext();
 //		this.jdbcContext.setDataSource(dataSource);
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		this.dataSource = dataSource;
+//		this.dataSource = dataSource;
 	}
 	
 	//로컬 클래스에서 외부변수를 사용할 때는 final로 선언해줘야함
@@ -172,15 +182,17 @@ public abstract class UserDAOBackup {
 		//rowMapper를 사용한 콜백 활용
 		return this.jdbcTemplate.queryForObject("select * from users where id=?", 
 				new Object[] {id}, //SQL에 바인딩한 파라미터 값, 가변인자 대신 배열을 사용함
-				new RowMapper<User>() { //RowMapper 콜백
-					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-						User user = new User();
-						user.setId(rs.getString("id"));
-						user.setName(rs.getString("name"));
-						user.setPassword(rs.getString("password"));
-						return user;
-				}
-		});
+				this.userMapper
+//				new RowMapper<User>() { //RowMapper 콜백
+//					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+//						User user = new User();
+//						user.setId(rs.getString("id"));
+//						user.setName(rs.getString("name"));
+//						user.setPassword(rs.getString("password"));
+//						return user;
+//				}
+//		});
+		);
 	}
 	
 	public void deleteAll() throws SQLException {
@@ -220,31 +232,31 @@ public abstract class UserDAOBackup {
 //		2) sql문만 사용하는 메소드
 		this.jdbcTemplate.update("delete from users");
 	}
-	public void jdbcContextWithStatmentStrategy(StatementStrategy stmt) throws SQLException{
-		Connection c = null;
-		PreparedStatement ps = null;
-		
-		try {
-			c = dataSource.getConnection();
-			ps = stmt.makePreparedStatement(c);
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			if(ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-				}
-			}
-			if(c != null) {
-				try {
-					c.close();
-				} catch (SQLException e) {
-				}
-			}
-		}
-	}
+//	public void jdbcContextWithStatmentStrategy(StatementStrategy stmt) throws SQLException{
+//		Connection c = null;
+//		PreparedStatement ps = null;
+//		
+//		try {
+//			c = dataSource.getConnection();
+//			ps = stmt.makePreparedStatement(c);
+//			ps.executeUpdate();
+//		} catch (SQLException e) {
+//			throw e;
+//		} finally {
+//			if(ps != null) {
+//				try {
+//					ps.close();
+//				} catch (SQLException e) {
+//				}
+//			}
+//			if(c != null) {
+//				try {
+//					c.close();
+//				} catch (SQLException e) {
+//				}
+//			}
+//		}
+//	}
 	public int getCount() throws SQLException {
 //		Connection c = null;
 //		PreparedStatement ps = null;
@@ -299,15 +311,17 @@ public abstract class UserDAOBackup {
 	
 	public List<User> getAll() {
 		return this.jdbcTemplate.query("select * from users order by id", 
-			new RowMapper<User>() {
-				public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-					User user = new User();
-					user.setId(rs.getString("id"));
-					user.setName(rs.getString("name"));
-					user.setPassword(rs.getString("password"));
-					return user;
-				}
-		});
+				this.userMapper
+//			new RowMapper<User>() {
+//				public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+//					User user = new User();
+//					user.setId(rs.getString("id"));
+//					user.setName(rs.getString("name"));
+//					user.setPassword(rs.getString("password"));
+//					return user;
+//				}
+//		});
+		);
 	}
 //	private void executeSql(final String query) throws SQLException {
 //		this.jdbcContext.workWithStatementStrategy(

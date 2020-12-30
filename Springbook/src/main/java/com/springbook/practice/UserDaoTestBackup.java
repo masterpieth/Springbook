@@ -158,6 +158,10 @@ public class UserDaoTestBackup {
 	public void getAll() throws SQLException, ClassNotFoundException {
 		dao.deleteAll();
 		
+		//예외상황에 대한 테스트 -> 데이터가 없을 때
+		List<User> users0 = dao.getAll();
+		assertThat(users0.size(), is(0));
+		
 		dao.add(user1);
 		List<User> users1 = dao.getAll();
 		assertThat(users1.size(), is(1));
