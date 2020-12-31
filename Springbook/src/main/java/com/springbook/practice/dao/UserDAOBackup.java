@@ -9,6 +9,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -71,7 +72,7 @@ public abstract class UserDAOBackup {
 	}
 	
 	//로컬 클래스에서 외부변수를 사용할 때는 final로 선언해줘야함
-	public void add(final User user) throws ClassNotFoundException, SQLException {
+	public void add(final User user) throws ClassNotFoundException, DuplicateKeyException, SQLException {
 		//로컬 클래스의 사용
 //		class AddStatement implements StatementStrategy{
 //			@Override
