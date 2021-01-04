@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.mysql.jdbc.MysqlErrorNumbers;
 import com.springbook.practice.domain.User;
 
 public abstract class UserDAOBackup {
@@ -72,7 +73,8 @@ public abstract class UserDAOBackup {
 	}
 	
 	//로컬 클래스에서 외부변수를 사용할 때는 final로 선언해줘야함
-	public void add(final User user) throws ClassNotFoundException, DuplicateKeyException, SQLException {
+	public void add(final User user) throws ClassNotFoundException, SQLException {
+		
 		//로컬 클래스의 사용
 //		class AddStatement implements StatementStrategy{
 //			@Override
@@ -139,6 +141,16 @@ public abstract class UserDAOBackup {
 		this.jdbcTemplate.update("insert into users(id, name, password) values(?,?,?)", 
 				user.getId(), user.getName(), user.getPassword()); 
 	}
+	
+	//예외 전환 사례
+//	public void add(User user) throws DuplicateUserIdException, SQLException {
+//		try {
+//		} catch(SQLException e) {
+//			// ErrorCode가 mysql의 duplicate Entry(1062)면 예외전환
+//			if(e.getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) throw DuplicateUserIdException();
+//			else throw e; //그 외의 경우는 그냥 던짐
+//		}
+//	}
 	
 //	public User get(String id) throws ClassNotFoundException, SQLException{
 	public User get(String id) {
