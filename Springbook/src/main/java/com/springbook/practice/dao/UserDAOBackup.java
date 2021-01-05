@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.mysql.jdbc.MysqlErrorNumbers;
+import com.springbook.exception.DuplicateUserIdException;
 import com.springbook.practice.domain.User;
 
 public abstract class UserDAOBackup {
@@ -149,6 +150,15 @@ public abstract class UserDAOBackup {
 //			// ErrorCode가 mysql의 duplicate Entry(1062)면 예외전환
 //			if(e.getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) throw DuplicateUserIdException();
 //			else throw e; //그 외의 경우는 그냥 던짐
+//		}
+//	}
+	//예외 만들어서 적용
+//	public void add2(User user) throws DuplicateUserIdException {
+//		try {
+//			//JDBC를 이용해 정보를 추가하는 코드 또는 SQL예외 발생하는 코드
+//		} catch(SQLException e) {
+//			if(e.getErrorCo-de() == MysqlErrorNumbers.ER_DUP_ENTRY) throw new DuplicateUserIdException(e);
+//			else throw new RuntimeException(e);
 //		}
 //	}
 	
