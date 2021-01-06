@@ -162,6 +162,15 @@ public abstract class UserDAOBackup {
 //		}
 //	}
 	
+	public void add() throws DuplicateUserIdException {
+		try {
+			//JDBC를 이용해 정보를 추가하는 코드
+		}
+		catch(DuplicateKeyException e) {
+			//로그찍기 등
+			throw new DuplicateUserIdException(e); //원인이 되는 예외 중첩해서 던짐
+		}
+	}
 //	public User get(String id) throws ClassNotFoundException, SQLException{
 	public User get(String id) {
 		
