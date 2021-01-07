@@ -16,7 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.springbook.practice.dao.UserDAO;
+import com.springbook.practice.dao.UserDAOJdbc;
 import com.springbook.practice.domain.User;
 
 //@ContextConfiguration(locations = "/applicationContext.xml") //테스트 컨텍스트가 자동으로 만들어줄 애플리케이션 컨텍스트의 위치 지정
@@ -81,7 +81,7 @@ public class UserDaoTestBackup {
 	}
 	
 //	@Autowired //컨테이너 없이 DI 테스트를 하기 위해서 주석처리됨
-	private UserDAO dao;
+	private UserDAOJdbc dao;
 	private User user1;
 	private User user2;
 	private User user3;

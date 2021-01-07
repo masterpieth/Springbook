@@ -45,7 +45,6 @@ public abstract class UserDAOBackup {
 			return user;
 		}
 	};
-	
 	//생성자를 통해서 주입받는 방법
 //	public UserDAO(ConnectionMaker connectionMaker) {
 ////		simpleConnectionMaker = new SimpleConnectionMaker();
@@ -113,6 +112,7 @@ public abstract class UserDAOBackup {
 //				return ps;
 //			}
 //		};
+
 		//익명 클래스를 사용했기 때문에 굳이 오브젝트를 형성할 필요가 없음, 바로 메소드 내에서 사용할 수 있게 함
 //		jdbcContextWithStatmentStrategy(
 //			new StatementStrategy() {

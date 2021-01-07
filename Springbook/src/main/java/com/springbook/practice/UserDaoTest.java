@@ -24,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.springbook.practice.dao.JdbcContext;
-import com.springbook.practice.dao.UserDAO;
+import com.springbook.practice.dao.UserDAOJdbc;
 import com.springbook.practice.domain.User;
 
 
@@ -33,7 +33,7 @@ public class UserDaoTest {
 		JUnitCore.main("com.springbook.practice.UserDaoTest");
 	}
 	
-	private UserDAO dao;
+	private UserDAOJdbc dao;
 	private User user1;
 	private User user2;
 	private User user3;
@@ -43,7 +43,7 @@ public class UserDaoTest {
 		this.user1 = new User("wronggim1", "nyk1", "1234");
 		this.user2 = new User("wronggim2", "nyk2", "1234");
 		this.user3 = new User("wronggim3", "nyk3", "1234");
-		dao = new UserDAO() {
+		dao = new UserDAOJdbc() {
 			
 			@Override
 			protected PreparedStatement makeStatement(Connection c) throws SQLException {
