@@ -12,15 +12,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLExceptionTranslator;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.dao.UserDAOJdbc;
 import com.springbook.practice.domain.User;
 
-//@ContextConfiguration(locations = "/applicationContext.xml") //테스트 컨텍스트가 자동으로 만들어줄 애플리케이션 컨텍스트의 위치 지정
 //@DirtiesContext // 테스트 메소드에서 애플리케이션 컨텍스트의 구성이나 상태를 변경한다는 것을 컨텍스트 프레임워크에 알려줌
+@ContextConfiguration(locations = "/applicationContext.xml") //테스트 컨텍스트가 자동으로 만들어줄 애플리케이션 컨텍스트의 위치 지정
 @RunWith(SpringJUnit4ClassRunner.class) //스프링의 테스트 컨텍스트 프레임워크의 JUnit 확장기능 지정
 //@ContextConfiguration(locations = "/test-applicationContext.xml") //테스트시에는 테스트용 설정파일을 사용함
 public class UserDaoTestBackup {
@@ -81,7 +88,14 @@ public class UserDaoTestBackup {
 	}
 	
 //	@Autowired //컨테이너 없이 DI 테스트를 하기 위해서 주석처리됨
-	private UserDAOJdbc dao;
+//	private UserDAOJdbc dao;
+	
+	@Autowired
+	UserDAO dao; //userdao 를 선언하고, userdaoJdbc를 넣어서 사용함
+	
+	@Autowired
+	DataSource dataSource;
+	
 	private User user1;
 	private User user2;
 	private User user3;
@@ -108,8 +122,9 @@ public class UserDaoTestBackup {
 //		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
 		
 //		dao = new UserDAO();
-		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
-		dao.setDataSource(dataSource);
+		//컨테이너에서 dao를 주입받아서 사용하기 때문에 필요없어짐
+//		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
+//		dao.setDataSource(dataSource);
 	}
 	
 	@Test
@@ -180,7 +195,30 @@ public class UserDaoTestBackup {
 		checkSameUser(user2, users3.get(1));
 		checkSameUser(user3, users3.get(2));
 	}
+	//dataAccessException 혹은 그 서브클래스 발생 학습테스트
+	@Test(expected = DataAccessException.class)
+	public void duplicateKey() {
+		dao.deleteAll();
+		dao.add(user1);
+		dao.add(user1); //강제로 같은 사용자를 두번 등록. 예외가 발생한다
+	}
 	
+	//Sql전환 학습테스트
+	@Test
+	public void sqlExceptionTranslate() {
+		dao.deleteAll();
+		
+		try {
+			dao.add(user1);
+			dao.add(user1);
+		} catch (DuplicateKeyException ex) {
+			SQLException sqlEx = (SQLException)ex.getRootCause(); //중첩된 sqlexception을 가져올 수 있음
+			SQLExceptionTranslator set = //코드를 이용한 SQLException 전환
+					new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
+									//에러메세지 만들때 사용하는 정보, null이어도 됨
+//			assertThat(set.translate(null, null, sqlEx), is(DuplicateKeyException.class));
+		}
+	}
 	//User 오브젝트의 내용을 비교, 중복되는 메소드라 따로 분리됨
 	private void checkSameUser(User user1, User user2) {
 		assertThat(user1.getId(), is(user2.getId()));

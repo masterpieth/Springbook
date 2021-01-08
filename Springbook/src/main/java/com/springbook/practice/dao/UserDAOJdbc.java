@@ -1,7 +1,5 @@
 package com.springbook.practice.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -13,9 +11,10 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.springbook.practice.domain.User;
 
-public abstract class UserDAOJdbc implements UserDAO{
+public class UserDAOJdbc implements UserDAO{
 	
 	private JdbcTemplate jdbcTemplate;
+	
 	private RowMapper<User> userMapper = new RowMapper<User>() {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User user = new User();
@@ -56,7 +55,5 @@ public abstract class UserDAOJdbc implements UserDAO{
 	public int getCount() {
 		return this.jdbcTemplate.queryForInt("select count(*) from users");
 	}
-	
-	abstract protected PreparedStatement makeStatement(Connection c) throws SQLException;
 }
 

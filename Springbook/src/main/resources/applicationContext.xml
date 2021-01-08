@@ -3,17 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-<!-- 	<bean id="connectionMaker" class="com.springbook.practice.dao.DConnectionMaker"/> -->
-	
 	<bean id="userDAO" class="com.springbook.practice.dao.UserDAOJdbc">
-<!-- 		<property name="connectionMaker" ref="connectionMaker"/> -->
 		<property name="dataSource" ref="dataSource"/>
-<!-- 		<property name="jdbcContext" ref="jdbcContext"/> -->
 	</bean>
-	
-<!-- 	<bean id="jdbcContext" class="com.springbook.practice.dao.JdbcContext"> -->
-<!-- 		<property name="dataSource" ref="dataSource"/> -->
-<!-- 	</bean> -->
 	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"/>

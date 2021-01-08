@@ -3,8 +3,6 @@ package com.springbook.practice;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,25 +13,29 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.springbook.practice.dao.JdbcContext;
-import com.springbook.practice.dao.UserDAOJdbc;
+import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.User;
 
-
+@ContextConfiguration(locations = "/applicationContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class UserDaoTest {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		JUnitCore.main("com.springbook.practice.UserDaoTest");
 	}
+	@Autowired
+	UserDAO dao;
 	
-	private UserDAOJdbc dao;
+	@Autowired
+	DataSource dataSource;
+	
 	private User user1;
 	private User user2;
 	private User user3;
@@ -43,15 +45,6 @@ public class UserDaoTest {
 		this.user1 = new User("wronggim1", "nyk1", "1234");
 		this.user2 = new User("wronggim2", "nyk2", "1234");
 		this.user3 = new User("wronggim3", "nyk3", "1234");
-		dao = new UserDAOJdbc() {
-			
-			@Override
-			protected PreparedStatement makeStatement(Connection c) throws SQLException {
-				return null;
-			}
-		};
-		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
-		dao.setDataSource(dataSource);
 	}
 	
 	@Test
@@ -118,6 +111,26 @@ public class UserDaoTest {
 		checkSameUser(user1, users3.get(0));
 		checkSameUser(user2, users3.get(1));
 		checkSameUser(user3, users3.get(2));
+	}
+	@Test(expected = DataAccessException.class)
+	public void duplicateKey() {
+		dao.deleteAll();
+		dao.add(user1);
+		dao.add(user1);
+	}
+	
+	@Test
+	public void sqlExceptionTranslate() {
+		dao.deleteAll();
+		
+		try {
+			dao.add(user1);
+			dao.add(user1);
+		} catch (DuplicateKeyException ex) {
+			SQLException sqlEx = (SQLException)ex.getRootCause();
+			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
+//			assertThat(set.translate(null, null, sqlEx), is(DuplicateKeyException.class));
+		}
 	}
 	
 	private void checkSameUser(User user1, User user2) {
