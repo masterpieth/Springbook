@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.dao.UserDAOJdbc;
+import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
 
 //@DirtiesContext // 테스트 메소드에서 애플리케이션 컨텍스트의 구성이나 상태를 변경한다는 것을 컨텍스트 프레임워크에 알려줌
@@ -114,9 +115,9 @@ public class UserDaoTestBackup {
 	@Before
 	public void setUp() {
 //		this.dao = context.getBean("userDAO", UserDAO.class);
-		this.user1 = new User("wronggim1", "nyk1", "1234");
-		this.user2 = new User("wronggim2", "nyk2", "1234");
-		this.user3 = new User("wronggim3", "nyk3", "1234");
+		this.user1 = new User("wronggim1", "nyk1", "1234", Level.BASIC,1,0);
+		this.user2 = new User("wronggim2", "nyk2", "1234",Level.SILVER,55,10);
+		this.user3 = new User("wronggim3", "nyk3", "1234",Level.GOLD,100,40);
 		
 		//테스트에서 userdao가 사용할 오브젝트를 직접 생성함(비추)
 //		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);
@@ -223,6 +224,9 @@ public class UserDaoTestBackup {
 	private void checkSameUser(User user1, User user2) {
 		assertThat(user1.getId(), is(user2.getId()));
 		assertThat(user1.getName(), is(user2.getName()));
+		assertThat(user1.getPassword(), is(user2.getPassword()));
+		assertThat(user1.getLevel(), is(user2.getPassword()));
+		assertThat(user1.getPassword(), is(user2.getPassword()));
 		assertThat(user1.getPassword(), is(user2.getPassword()));
 	}
 }

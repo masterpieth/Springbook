@@ -22,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.springbook.practice.dao.UserDAO;
+import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
 
 @ContextConfiguration(locations = "/applicationContext.xml")
@@ -42,9 +43,9 @@ public class UserDaoTest {
 	
 	@Before
 	public void setUp() {
-		this.user1 = new User("wronggim1", "nyk1", "1234");
-		this.user2 = new User("wronggim2", "nyk2", "1234");
-		this.user3 = new User("wronggim3", "nyk3", "1234");
+		this.user1 = new User("wronggim1", "nyk1", "1234", Level.BASIC, 1, 0);
+		this.user2 = new User("wronggim2", "nyk2", "1234", Level.SILVER, 55, 10);
+		this.user3 = new User("wronggim3", "nyk3", "1234", Level.GOLD, 100, 40);
 	}
 	
 	@Test
@@ -117,20 +118,6 @@ public class UserDaoTest {
 		dao.deleteAll();
 		dao.add(user1);
 		dao.add(user1);
-	}
-	
-	@Test
-	public void sqlExceptionTranslate() {
-		dao.deleteAll();
-		
-		try {
-			dao.add(user1);
-			dao.add(user1);
-		} catch (DuplicateKeyException ex) {
-			SQLException sqlEx = (SQLException)ex.getRootCause();
-			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
-//			assertThat(set.translate(null, null, sqlEx), is(DuplicateKeyException.class));
-		}
 	}
 	
 	private void checkSameUser(User user1, User user2) {
