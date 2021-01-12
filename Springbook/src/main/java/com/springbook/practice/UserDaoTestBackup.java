@@ -138,13 +138,19 @@ public class UserDaoTestBackup {
 		assertThat(dao.getCount(), is(2));
 		
 		//정말로 add된 값을 그대로 가져온것일까? 에 대한 테스트
+//		User userget1 = dao.get(user1.getId());
+//		assertThat(userget1.getName(), is(user1.getName()));
+//		assertThat(userget1.getPassword(), is(user1.getPassword()));
+		
+//		User userget2 = dao.get(user2.getId());
+//		assertThat(userget2.getName(), is(user2.getName()));
+//		assertThat(userget2.getPassword(), is(user2.getPassword()));
+		
 		User userget1 = dao.get(user1.getId());
-		assertThat(userget1.getName(), is(user1.getName()));
-		assertThat(userget1.getPassword(), is(user1.getPassword()));
+		checkSameUser(userget1, user1);
 		
 		User userget2 = dao.get(user2.getId());
-		assertThat(userget2.getName(), is(user2.getName()));
-		assertThat(userget2.getPassword(), is(user2.getPassword()));
+		checkSameUser(userget2, user2);
 	}
 	//하나의 테스트는 하나의 기능만 검증해야한다
 	@Test
@@ -220,13 +226,35 @@ public class UserDaoTestBackup {
 //			assertThat(set.translate(null, null, sqlEx), is(DuplicateKeyException.class));
 		}
 	}
+	
+	@Test
+	public void update() {
+		dao.deleteAll();
+		
+		dao.add(user1); //수정할 사용자
+		dao.add(user2); //수정안할 사용자
+		
+		user1.setName("nyk4");
+		user1.setPassword("12345678");
+		user1.setLevel(Level.GOLD);
+		user1.setLogin(1000);
+		user1.setRecommend(999);
+		
+		dao.update(user1);
+		
+		User user1update = dao.get(user1.getId());
+		checkSameUser(user1, user1update);
+		//user2는 바뀌지 않았어야함 -> where 절이 없는 경우 테스트 실패
+		User user2same = dao.get(user2.getId());
+		checkSameUser(user2, user2same);
+	}
 	//User 오브젝트의 내용을 비교, 중복되는 메소드라 따로 분리됨
 	private void checkSameUser(User user1, User user2) {
 		assertThat(user1.getId(), is(user2.getId()));
 		assertThat(user1.getName(), is(user2.getName()));
 		assertThat(user1.getPassword(), is(user2.getPassword()));
-		assertThat(user1.getLevel(), is(user2.getPassword()));
-		assertThat(user1.getPassword(), is(user2.getPassword()));
-		assertThat(user1.getPassword(), is(user2.getPassword()));
+		assertThat(user1.getLevel(), is(user2.getLevel()));
+		assertThat(user1.getLogin(), is(user2.getLogin()));
+		assertThat(user1.getRecommend(), is(user2.getRecommend()));
 	}
 }
