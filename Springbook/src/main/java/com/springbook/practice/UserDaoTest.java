@@ -25,7 +25,7 @@ import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
 
-@ContextConfiguration(locations = "/applicationContext.xml")
+@ContextConfiguration(locations = "/test-applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserDaoTest {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
