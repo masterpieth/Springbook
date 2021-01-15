@@ -58,4 +58,14 @@ public class User {
 	//자바빈 규약을 따르는 클래스에 생성자를 명시적으로 추가했을 때는 디폴트 생성자도 생성해줘야 함
 	public User() {
 	}
+	
+	public void upgradeLevel() {
+		Level nextLevel = this.level.nextLevel();
+		if(nextLevel == null) {
+			throw new IllegalStateException(this.level + "은 업그레이드가 불가능합니다.");
+		}
+		else {
+			this.level = nextLevel;
+		}
+	}
 }

@@ -1,16 +1,22 @@
 package com.springbook.practice.domain;
 
 public enum Level {
-	BASIC(1), SILVER(2), GOLD(3); //이늄 오브젝트 정의
+	GOLD(3, null), SILVER(2, GOLD), BASIC(1, SILVER);
 	
 	private final int value;
+	private final Level next;
 	
-	Level(int value) { //db에 저장할 값을 넣어줄 생성자 만듦
+	Level(int value, Level next) {
 		this.value = value;
+		this.next = next;
 	}
 	
 	public int intValue() { //value 가져오는 메소드
 		return value;
+	}
+	
+	public Level nextLevel() {
+		return this.next;
 	}
 	
 	public static Level valueOf(int value) { // 값으로부터 level타입 오브젝트를 가져오도록 함

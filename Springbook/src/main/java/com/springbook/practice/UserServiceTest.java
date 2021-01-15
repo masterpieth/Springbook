@@ -54,17 +54,48 @@ public class UserServiceTest {
 		for(User user : users) userDAO.add(user);
 		
 		userService.upgradeLevels();
-		
-		checkLevel(users.get(0), Level.BASIC);
-		checkLevel(users.get(1), Level.SILVER);
-		checkLevel(users.get(2), Level.SILVER);
-		checkLevel(users.get(3), Level.GOLD);
-		checkLevel(users.get(4), Level.GOLD);
+	
+		checkLevelUpgraded(users.get(0), false);
+		checkLevelUpgraded(users.get(1), true);
+		checkLevelUpgraded(users.get(2), false);
+		checkLevelUpgraded(users.get(3), true);
+		checkLevelUpgraded(users.get(4), false);
 	}
 	
+	//신버전 checkLevel
+	private void checkLevelUpgraded(User user, boolean upgraded) {
+		User userUpdate = userDAO.get(user.getId());
+		if(upgraded) {
+			assertThat(userUpdate.getLevel(), is(user.getLevel().nextLevel()));
+		}
+		else {
+			assertThat(userUpdate.getLevel(), is(user.getLevel()));
+		}
+	}
+
+	//구버전 checkLevel -> assertThat의 두번째 파라미터가 level값
+	@Autowired(required = false)
 	private void checkLevel(User user, Level expectedLevel) {
 		User userUpdate = userDAO.get(user.getId());
 		assertThat(userUpdate.getLevel(), is(expectedLevel));
+	}
+	
+	@Test
+	public void add() {
+		userDAO.deleteAll();
+		
+		User userWithLevel = users.get(4);
+		User userWithoutLevel = users.get(0);
+		userWithoutLevel.setLevel(null);
+		
+		userService.add(userWithLevel);
+		userService.add(userWithoutLevel);
+		
+		User userWithLevelRead = userDAO.get(userWithLevel.getId());
+		User userWithoutLevelRead = userDAO.get(userWithoutLevel.getId());
+		
+		assertThat(userWithLevelRead.getLevel(), is(userWithLevel.getLevel()));
+		assertThat(userWithoutLevelRead.getLevel(), is(Level.BASIC));
 	}
 }
 
