@@ -5,10 +5,15 @@
 	
 	<bean id="userService" class="com.springbook.practice.dao.UserService">
 		<property name="userDAO" ref="userDAO"/>
+		<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
 	</bean>
 	
 	<bean id="userDAO" class="com.springbook.practice.dao.UserDAOJdbc">
 		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="userLevelUpgradePolicy" class="com.springbook.practice.dao.UserLevelUpgradePolicyCommon">
+		<property name="userDAO" ref="userDAO"/>
 	</bean>
 	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">

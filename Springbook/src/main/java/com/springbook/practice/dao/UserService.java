@@ -8,11 +8,16 @@ import com.springbook.practice.domain.User;
 public class UserService {
 
 	UserDAO userDAO;
+	UserLevelUpgradePolicy userLevelUpgradePolicy;
 	
 	public void setUserDAO(UserDAO userDao) {
 		this.userDAO = userDao;
 	}
 	
+	public void setUserLevelUpgradePolicy(UserLevelUpgradePolicy userLevelUpgradePolicy) {
+		this.userLevelUpgradePolicy = userLevelUpgradePolicy;
+	}
+
 	public void add(User user) {
 		if(user.getLevel() == null) user.setLevel(Level.BASIC);
 		userDAO.add(user);
@@ -28,18 +33,10 @@ public class UserService {
 	}
 	
 	private boolean canUpgradeLevel(User user) {
-		Level currentLevel = user.getLevel();
-		switch (currentLevel) {
-		case BASIC: return (user.getLogin() >= 50);
-		case SILVER: return (user.getRecommend() >= 30);
-		case GOLD: return false;
-		default: throw new IllegalArgumentException("Unknown Level: " + currentLevel);
-		}
+		return userLevelUpgradePolicy.canUpgradeLevel(user);
 	}
-	private void upgradeLevel(User user) {
-		user.upgradeLevel();
-		userDAO.update(user);
+	protected void upgradeLevel(User user) {
+		userLevelUpgradePolicy.upgradeLevel(user);
 	}
-
 
 }

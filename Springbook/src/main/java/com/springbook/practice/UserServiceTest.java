@@ -1,6 +1,7 @@
 package com.springbook.practice;
 
 import static org.hamcrest.CoreMatchers.is;
+
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -19,6 +20,9 @@ import com.springbook.practice.dao.UserService;
 import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
 
+import static com.springbook.practice.dao.UserLevelUpgradePolicyCommon.MIN_LOGOUT_FOR_SILVER;
+import static com.springbook.practice.dao.UserLevelUpgradePolicyCommon.MIN_RECOMMEND_FOR_GOLD;
+
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserServiceTest {
@@ -31,14 +35,31 @@ public class UserServiceTest {
 	
 	List<User> users;
 	
+	static class TestUserServiceException extends RuntimeException{
+		
+	}
+	
+	static class TestUserService extends UserService {
+		private String id;
+		
+		private TestUserService(String id) {
+			this.id = id;
+		}
+		
+		protected void upgradeLevel(User user) {
+			if(user.getId().equals(this.id)) throw new TestUserServiceException();
+			super.upgradeLevel(user);
+		}
+	}
+	
 	@Before
 	public void setUp() {
 		users = Arrays.asList(
-				new User("wronggim1", "nyk1", "1234", Level.BASIC, 49, 0),
-				new User("wronggim2", "nyk2", "12345", Level.BASIC, 50, 0),
-				new User("wronggim3", "nyk3", "123456", Level.SILVER, 60, 29),
-				new User("wronggim4", "nyk4", "1234567", Level.SILVER, 60, 30),
-				new User("wronggim5", "nyk5", "12345678", Level.GOLD, 100, 100)
+				new User("wronggim1", "nyk1", "1234", Level.BASIC, MIN_LOGOUT_FOR_SILVER-1, 0),
+				new User("wronggim2", "nyk2", "12345", Level.BASIC, MIN_LOGOUT_FOR_SILVER, 0),
+				new User("wronggim3", "nyk3", "123456", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD-1),
+				new User("wronggim4", "nyk4", "1234567", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
+				new User("wronggim5", "nyk5", "12345678", Level.GOLD, 100, Integer.MAX_VALUE)
 		);
 	}
 	
