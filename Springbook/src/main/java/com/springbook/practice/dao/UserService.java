@@ -32,7 +32,7 @@ public class UserService {
 		}
 	}
 	
-	private boolean canUpgradeLevel(User user) {
+	protected boolean canUpgradeLevel(User user) {
 		return userLevelUpgradePolicy.canUpgradeLevel(user);
 	}
 	protected void upgradeLevel(User user) {

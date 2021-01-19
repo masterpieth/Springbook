@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.springbook.practice.dao.UserDAO;
+import com.springbook.practice.dao.UserLevelUpgradePolicy;
+import com.springbook.practice.dao.UserLevelUpgradePolicyCommon;
 import com.springbook.practice.dao.UserService;
 import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
@@ -48,6 +51,7 @@ public class UserServiceTest {
 		
 		protected void upgradeLevel(User user) {
 			if(user.getId().equals(this.id)) throw new TestUserServiceException();
+			
 			super.upgradeLevel(user);
 		}
 	}
@@ -117,6 +121,26 @@ public class UserServiceTest {
 		
 		assertThat(userWithLevelRead.getLevel(), is(userWithLevel.getLevel()));
 		assertThat(userWithoutLevelRead.getLevel(), is(Level.BASIC));
+	}
+	
+	@Test
+	public void upgradeAllOrNothing() {
+		
+		UserService testUserService = new TestUserService(users.get(3).getId());
+		testUserService.setUserDAO(this.userDAO);
+		UserLevelUpgradePolicyCommon policy = new UserLevelUpgradePolicyCommon();
+		policy.setUserDAO(this.userDAO);
+		testUserService.setUserLevelUpgradePolicy(policy);
+		
+		userDAO.deleteAll();
+		for(User user : users) userDAO.add(user);
+		
+		try {
+			testUserService.upgradeLevels();
+			fail("TestUserServiceException expected");
+		} catch (TestUserServiceException e) {
+		}
+		checkLevelUpgraded(users.get(1), false);
 	}
 }
 
