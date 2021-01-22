@@ -6,6 +6,7 @@
 	<bean id="userService" class="com.springbook.practice.dao.UserService">
 		<property name="userDAO" ref="userDAO"/>
 		<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
+		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
 	<bean id="userDAO" class="com.springbook.practice.dao.UserDAOJdbc">

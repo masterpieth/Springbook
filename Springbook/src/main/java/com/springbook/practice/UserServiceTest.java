@@ -9,6 +9,8 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +37,9 @@ public class UserServiceTest {
 	
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	DataSource dataSource;
 	
 	List<User> users;
 	
@@ -74,7 +79,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void upgradeLevels() {
+	public void upgradeLevels() throws Exception {
 		userDAO.deleteAll();
 		for(User user : users) userDAO.add(user);
 		
@@ -124,13 +129,15 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void upgradeAllOrNothing() {
+	public void upgradeAllOrNothing() throws Exception {
 		
 		UserService testUserService = new TestUserService(users.get(3).getId());
-		testUserService.setUserDAO(this.userDAO);
 		UserLevelUpgradePolicyCommon policy = new UserLevelUpgradePolicyCommon();
 		policy.setUserDAO(this.userDAO);
+		
+		testUserService.setUserDAO(this.userDAO);
 		testUserService.setUserLevelUpgradePolicy(policy);
+		testUserService.setDataSource(this.dataSource);
 		
 		userDAO.deleteAll();
 		for(User user : users) userDAO.add(user);

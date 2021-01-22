@@ -3,6 +3,7 @@ package com.springbook.practice.dao;
 import java.sql.Connection;
 import java.util.List;
 
+import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -59,6 +60,23 @@ public class UserService {
 		}
 		
 	}
+	
+//	public void tempMethod() {
+//		InitialContext ctx = new InitialContext();
+//		UserTranaction tx = ctx.lookup(USER_TX_JNDI_NAME);
+//		tx.begin();
+//		Connection c = dataSource.getConnection();
+//		
+//		try {
+//			tx.commit();
+//		} catch (Exception e) {
+//			tx.rollback();
+//			throw e;
+//		} finally {
+//			c.close();
+//		}
+//		
+//	}
 	
 	protected boolean canUpgradeLevel(User user) {
 		return userLevelUpgradePolicy.canUpgradeLevel(user);
