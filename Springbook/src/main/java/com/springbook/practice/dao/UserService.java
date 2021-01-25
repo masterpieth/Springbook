@@ -1,13 +1,10 @@
 package com.springbook.practice.dao;
 
-import java.sql.Connection;
 import java.util.List;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
@@ -18,11 +15,7 @@ public class UserService {
 	
 	UserLevelUpgradePolicy userLevelUpgradePolicy;
 	
-	private DataSource dataSource;
-	
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	private PlatformTransactionManager transactionManager;
 	
 	public void setUserDAO(UserDAO userDao) {
 		this.userDAO = userDao;
@@ -32,16 +25,18 @@ public class UserService {
 		this.userLevelUpgradePolicy = userLevelUpgradePolicy;
 	}
 
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
+	}
+
 	public void add(User user) {
 		if(user.getLevel() == null) user.setLevel(Level.BASIC);
 		userDAO.add(user);
 	}
 	
-	public void upgradeLevels() throws Exception {
-		TransactionSynchronizationManager.initSynchronization();
-		Connection c = DataSourceUtils.getConnection(dataSource);
-		c.setAutoCommit(false);
+	public void upgradeLevels() {
 		
+		TransactionStatus status = this.transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
 			List<User> users = userDAO.getAll();
 			for(User user : users) {
@@ -49,34 +44,12 @@ public class UserService {
 					upgradeLevel(user);
 				}
 			}
-			c.commit();
-		} catch (Exception e) {
-			c.rollback();
+			this.transactionManager.commit(status);
+		} catch (RuntimeException e) {
+			this.transactionManager.rollback(status);
 			throw e;
-		} finally {
-			DataSourceUtils.releaseConnection(c, dataSource);
-			TransactionSynchronizationManager.unbindResource(this.dataSource);
-			TransactionSynchronizationManager.clearSynchronization();
-		}
-		
+		} 
 	}
-	
-//	public void tempMethod() {
-//		InitialContext ctx = new InitialContext();
-//		UserTranaction tx = ctx.lookup(USER_TX_JNDI_NAME);
-//		tx.begin();
-//		Connection c = dataSource.getConnection();
-//		
-//		try {
-//			tx.commit();
-//		} catch (Exception e) {
-//			tx.rollback();
-//			throw e;
-//		} finally {
-//			c.close();
-//		}
-//		
-//	}
 	
 	protected boolean canUpgradeLevel(User user) {
 		return userLevelUpgradePolicy.canUpgradeLevel(user);
