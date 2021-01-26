@@ -14,10 +14,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
-import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,9 +40,9 @@ public class UserDaoTest {
 	
 	@Before
 	public void setUp() {
-		this.user1 = new User("wronggim1", "nyk1", "1234", Level.BASIC, 1, 0);
-		this.user2 = new User("wronggim2", "nyk2", "1234", Level.SILVER, 55, 10);
-		this.user3 = new User("wronggim3", "nyk3", "1234", Level.GOLD, 100, 40);
+		this.user1 = new User("wronggim1", "nyk1", "1234", Level.BASIC, 1, 0, "kny0339@gmail.com");
+		this.user2 = new User("wronggim2", "nyk2", "1234", Level.SILVER, 55, 10, "kny0339@gmail.com");
+		this.user3 = new User("wronggim3", "nyk3", "1234", Level.GOLD, 100, 40, "kny0339@gmail.com");
 	}
 	
 	@Test
@@ -147,5 +144,6 @@ public class UserDaoTest {
 		assertThat(user1.getLevel(), is(user2.getLevel()));
 		assertThat(user1.getLogin(), is(user2.getLogin()));
 		assertThat(user1.getRecommend(), is(user2.getRecommend()));
+		assertThat(user1.getEmail(), is(user2.getEmail()));
 	}
 }

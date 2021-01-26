@@ -115,9 +115,9 @@ public class UserDaoTestBackup {
 	@Before
 	public void setUp() {
 //		this.dao = context.getBean("userDAO", UserDAO.class);
-		this.user1 = new User("wronggim1", "nyk1", "1234", Level.BASIC,1,0);
-		this.user2 = new User("wronggim2", "nyk2", "1234",Level.SILVER,55,10);
-		this.user3 = new User("wronggim3", "nyk3", "1234",Level.GOLD,100,40);
+		this.user1 = new User("wronggim1", "nyk1", "1234", Level.BASIC,1,0, "kny0339@gmail.com");
+		this.user2 = new User("wronggim2", "nyk2", "1234",Level.SILVER,55,10, "kny0339@gmail.com");
+		this.user3 = new User("wronggim3", "nyk3", "1234",Level.GOLD,100,40, "kny0339@gmail.com");
 		
 		//테스트에서 userdao가 사용할 오브젝트를 직접 생성함(비추)
 //		DataSource dataSource= new SingleConnectionDataSource("jdbc:mysql://localhost/testdb","root","1234", true);

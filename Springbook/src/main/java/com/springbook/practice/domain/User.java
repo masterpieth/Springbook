@@ -8,7 +8,14 @@ public class User {
 	Level level;
 	int login;
 	int recommend;
+	String email;
 	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public Level getLevel() {
 		return level;
 	}
@@ -46,7 +53,7 @@ public class User {
 		this.password = password;
 	}
 	
-	public User(String id, String name, String password, Level level, int login, int recommend) {
+	public User(String id, String name, String password, Level level, int login, int recommend, String email) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -54,6 +61,7 @@ public class User {
 		this.level = level;
 		this.login = login;
 		this.recommend = recommend;
+		this.email = email;
 	}
 	//자바빈 규약을 따르는 클래스에 생성자를 명시적으로 추가했을 때는 디폴트 생성자도 생성해줘야 함
 	public User() {
