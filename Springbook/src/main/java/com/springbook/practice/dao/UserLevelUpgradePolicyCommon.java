@@ -3,8 +3,10 @@ package com.springbook.practice.dao;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -41,10 +43,17 @@ public class UserLevelUpgradePolicyCommon implements UserLevelUpgradePolicy{
 	}
 	
 	private void sendUpgradeEmail(User user) {
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "mail.ksug.org");
-		Session s = Session.getInstance(props, null);
 		
+		Properties props = new Properties();
+		
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "587");
+		
+		Authenticator auth = new MailAuth();
+		
+		Session s = Session.getInstance(props, auth);
 		MimeMessage message = new MimeMessage(s);
 		try {
 			message.setFrom(new InternetAddress("useradmin@ksug.org"));
@@ -60,5 +69,18 @@ public class UserLevelUpgradePolicyCommon implements UserLevelUpgradePolicy{
 		}
 	}
 
-	
+	class MailAuth extends Authenticator {
+		PasswordAuthentication pwAuth;
+
+		public MailAuth() {
+			String mail_id = "";
+			//원격에 올릴때 삭제하고 올리기
+			String mail_pw = "";
+			
+			pwAuth = new PasswordAuthentication(mail_id, mail_pw);
+		}
+		public PasswordAuthentication getPasswordAuthentication() {
+			return pwAuth;
+		}
+	}
 }
