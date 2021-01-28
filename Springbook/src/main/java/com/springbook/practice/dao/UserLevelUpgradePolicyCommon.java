@@ -13,6 +13,9 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+
 import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
 
@@ -44,29 +47,17 @@ public class UserLevelUpgradePolicyCommon implements UserLevelUpgradePolicy{
 	
 	private void sendUpgradeEmail(User user) {
 		
-		Properties props = new Properties();
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("mail.server.com");
 		
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.port", "587");
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo("ffpieth@gmail.com");
+		mailMessage.setFrom("kny0339@gmail.com");
+		mailMessage.setSubject("Upgrade 안내");
+		mailMessage.setText("사용자님의 등급이 " + user.getLevel().name() + "로 업그레이드 되었습니다.");
 		
-		Authenticator auth = new MailAuth();
+		mailSender.send(mailMessage);
 		
-		Session s = Session.getInstance(props, auth);
-		MimeMessage message = new MimeMessage(s);
-		try {
-			message.setFrom(new InternetAddress("useradmin@ksug.org"));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
-			message.setSubject("Upgrade 안내");
-			message.setText("사용자님의 등급이 " + user.getLevel().name() + "로 업그레이드 되었습니다.");
-			
-			Transport.send(message);
-		} catch (AddressException e) {
-			throw new RuntimeException(e);
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	class MailAuth extends Authenticator {
