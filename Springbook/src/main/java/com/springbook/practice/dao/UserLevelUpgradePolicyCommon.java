@@ -13,6 +13,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -22,6 +23,7 @@ import com.springbook.practice.domain.User;
 public class UserLevelUpgradePolicyCommon implements UserLevelUpgradePolicy{
 
 	UserDAO userDAO;
+	private MailSender mailSender;
 	
 	public static final int MIN_LOGOUT_FOR_SILVER = 50;
 	public static final int MIN_RECOMMEND_FOR_GOLD = 30;
@@ -29,6 +31,11 @@ public class UserLevelUpgradePolicyCommon implements UserLevelUpgradePolicy{
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+	
+	public void setMailSender(MailSender mailSender) {
+		this.mailSender = mailSender;
+	}
+
 	public boolean canUpgradeLevel(User user) {
 		Level currentLevel = user.getLevel();
 		switch (currentLevel) {
@@ -44,19 +51,16 @@ public class UserLevelUpgradePolicyCommon implements UserLevelUpgradePolicy{
 		userDAO.update(user);
 		sendUpgradeEmail(user);
 	}
-	
+	 
 	private void sendUpgradeEmail(User user) {
 		
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("mail.server.com");
-		
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo("ffpieth@gmail.com");
+		mailMessage.setTo(user.getEmail());
 		mailMessage.setFrom("kny0339@gmail.com");
 		mailMessage.setSubject("Upgrade 안내");
 		mailMessage.setText("사용자님의 등급이 " + user.getLevel().name() + "로 업그레이드 되었습니다.");
 		
-		mailSender.send(mailMessage);
+		this.mailSender.send(mailMessage);
 		
 	}
 
