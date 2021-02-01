@@ -1,4 +1,4 @@
-package com.springbook.practice.dao;
+package com.springbook.practice.service;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.springbook.practice.dao.UserDAO;
 import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
 

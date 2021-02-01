@@ -1,5 +1,7 @@
 package com.springbook.practice;
 
+import static com.springbook.practice.service.UserLevelUpgradePolicyCommon.MIN_LOGOUT_FOR_SILVER;
+import static com.springbook.practice.service.UserLevelUpgradePolicyCommon.MIN_RECOMMEND_FOR_GOLD;
 import static org.hamcrest.CoreMatchers.is;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -15,19 +17,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.springbook.practice.dao.UserDAO;
-import com.springbook.practice.dao.UserLevelUpgradePolicy;
-import com.springbook.practice.dao.UserLevelUpgradePolicyCommon;
-import com.springbook.practice.dao.UserService;
 import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
-
-import static com.springbook.practice.dao.UserLevelUpgradePolicyCommon.MIN_LOGOUT_FOR_SILVER;
-import static com.springbook.practice.dao.UserLevelUpgradePolicyCommon.MIN_RECOMMEND_FOR_GOLD;
+import com.springbook.practice.service.UserLevelUpgradePolicy;
+import com.springbook.practice.service.UserLevelUpgradePolicyCommon;
+import com.springbook.practice.service.UserService;
 
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,6 +44,9 @@ public class UserServiceTest {
 	
 	@Autowired
 	PlatformTransactionManager transactionManager;
+	
+	@Autowired
+	MailSender mailSender;
 	
 	List<User> users;
 	
@@ -138,6 +141,7 @@ public class UserServiceTest {
 		UserService testUserService = new TestUserService(users.get(3).getId());
 		UserLevelUpgradePolicyCommon policy = new UserLevelUpgradePolicyCommon();
 		policy.setUserDAO(this.userDAO);
+		policy.setMailSender(mailSender);
 		
 		testUserService.setUserDAO(this.userDAO);
 		testUserService.setUserLevelUpgradePolicy(policy);

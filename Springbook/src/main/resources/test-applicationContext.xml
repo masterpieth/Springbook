@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<bean id="userService" class="com.springbook.practice.dao.UserService">
+	<bean id="userService" class="com.springbook.practice.service.UserService">
 		<property name="userDAO" ref="userDAO"/>
 		<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
 		<property name="transactionManager" ref="transactionManager"/>
@@ -13,7 +13,7 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
-	<bean id="userLevelUpgradePolicy" class="com.springbook.practice.dao.UserLevelUpgradePolicyCommon">
+	<bean id="userLevelUpgradePolicy" class="com.springbook.practice.service.UserLevelUpgradePolicyCommon">
 		<property name="userDAO" ref="userDAO"/>
 		<property name="mailSender" ref="mailSender"/>
 	</bean>
@@ -22,9 +22,7 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="mail.server.com"/>
-	</bean>
+	<bean id="mailSender" class="com.springbook.practice.service.DummyMailSender" />
 	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"/>

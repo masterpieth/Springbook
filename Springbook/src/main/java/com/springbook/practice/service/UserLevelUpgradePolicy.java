@@ -1,4 +1,4 @@
-package com.springbook.practice.dao;
+package com.springbook.practice.service;
 
 import com.springbook.practice.domain.User;
 
