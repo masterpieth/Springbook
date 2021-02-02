@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,6 +29,7 @@ import com.springbook.practice.domain.User;
 import com.springbook.practice.service.UserLevelUpgradePolicy;
 import com.springbook.practice.service.UserLevelUpgradePolicyCommon;
 import com.springbook.practice.service.UserService;
+import com.springbook.practice.test.MockMailSender;
 
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -86,9 +88,18 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@DirtiesContext
 	public void upgradeLevels() throws Exception {
 		userDAO.deleteAll();
 		for(User user : users) userDAO.add(user);
+		
+		MockMailSender mockMailSender = new MockMailSender();
+		
+		UserLevelUpgradePolicyCommon policy = new UserLevelUpgradePolicyCommon();
+		policy.setUserDAO(userDAO);
+		policy.setMailSender(mockMailSender);
+		
+		userService.setUserLevelUpgradePolicy(policy);
 		
 		userService.upgradeLevels();
 	
@@ -97,6 +108,11 @@ public class UserServiceTest {
 		checkLevelUpgraded(users.get(2), false);
 		checkLevelUpgraded(users.get(3), true);
 		checkLevelUpgraded(users.get(4), false);
+		
+		List<String> reauest = mockMailSender.getRequests();
+		assertThat(reauest.size(), is(2));
+		assertThat(reauest.get(0), is(users.get(1).getEmail()));
+		assertThat(reauest.get(1), is(users.get(3).getEmail()));
 	}
 	
 	//신버전 checkLevel

@@ -22,7 +22,7 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
-	<bean id="mailSender" class="com.springbook.practice.service.DummyMailSender" />
+	<bean id="mailSender" class="com.springbook.practice.test.DummyMailSender" />
 	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
