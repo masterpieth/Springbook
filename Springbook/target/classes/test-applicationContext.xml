@@ -3,10 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<bean id="userService" class="com.springbook.practice.service.UserService">
-		<property name="userDAO" ref="userDAO"/>
-		<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
+	<bean id="userService" class="com.springbook.practice.service.UserServiceTx">
 		<property name="transactionManager" ref="transactionManager"/>
+		<property name="userServiceImpl" ref="userServiceImpl"></property>
+	</bean>
+	
+	<bean id="userServiceImpl" class="com.springbook.practice.service.UserServiceImpl">
+		<property name="userDAO" ref="userDAO"></property>
+		<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
 	</bean>
 	
 	<bean id="userDAO" class="com.springbook.practice.dao.UserDAOJdbc">

@@ -28,7 +28,7 @@ import com.springbook.practice.domain.Level;
 import com.springbook.practice.domain.User;
 import com.springbook.practice.service.UserLevelUpgradePolicy;
 import com.springbook.practice.service.UserLevelUpgradePolicyCommon;
-import com.springbook.practice.service.UserService;
+import com.springbook.practice.service.UserServiceImpl;
 import com.springbook.practice.test.MockMailSender;
 
 @ContextConfiguration(locations = "/test-applicationContext.xml")
@@ -36,7 +36,7 @@ import com.springbook.practice.test.MockMailSender;
 public class UserServiceTest {
 
 	@Autowired
-	UserService userService;
+	UserServiceImpl userService;
 	
 	@Autowired
 	UserDAO userDAO;
@@ -56,7 +56,7 @@ public class UserServiceTest {
 		
 	}
 	
-	static class TestUserService extends UserService {
+	static class TestUserService extends UserServiceImpl {
 		private String id;
 		
 		private TestUserService(String id) {
@@ -154,7 +154,7 @@ public class UserServiceTest {
 	@Test
 	public void upgradeAllOrNothing() throws Exception {
 		
-		UserService testUserService = new TestUserService(users.get(3).getId());
+		UserServiceImpl testUserService = new TestUserService(users.get(3).getId());
 		UserLevelUpgradePolicyCommon policy = new UserLevelUpgradePolicyCommon();
 		policy.setUserDAO(this.userDAO);
 		policy.setMailSender(mailSender);
