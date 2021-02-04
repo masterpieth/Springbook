@@ -29,6 +29,7 @@ import com.springbook.practice.domain.User;
 import com.springbook.practice.service.UserLevelUpgradePolicy;
 import com.springbook.practice.service.UserLevelUpgradePolicyCommon;
 import com.springbook.practice.service.UserServiceImpl;
+import com.springbook.practice.service.UserServiceTx;
 import com.springbook.practice.test.MockMailSender;
 
 @ContextConfiguration(locations = "/test-applicationContext.xml")
@@ -36,7 +37,7 @@ import com.springbook.practice.test.MockMailSender;
 public class UserServiceTest {
 
 	@Autowired
-	UserServiceImpl userService;
+	UserServiceImpl userServiceImpl;
 	
 	@Autowired
 	UserDAO userDAO;
@@ -84,7 +85,7 @@ public class UserServiceTest {
 	//빈 주입 확인용
 	@Test
 	public void bean() {
-		assertThat(this.userService, is(notNullValue()));
+		assertThat(this.userServiceImpl, is(notNullValue()));
 	}
 	
 	@Test
@@ -99,9 +100,9 @@ public class UserServiceTest {
 		policy.setUserDAO(userDAO);
 		policy.setMailSender(mockMailSender);
 		
-		userService.setUserLevelUpgradePolicy(policy);
+		userServiceImpl.setUserLevelUpgradePolicy(policy);
 		
-		userService.upgradeLevels();
+		userServiceImpl.upgradeLevels();
 	
 		checkLevelUpgraded(users.get(0), false);
 		checkLevelUpgraded(users.get(1), true);
@@ -141,8 +142,8 @@ public class UserServiceTest {
 		User userWithoutLevel = users.get(0);
 		userWithoutLevel.setLevel(null);
 		
-		userService.add(userWithLevel);
-		userService.add(userWithoutLevel);
+		userServiceImpl.add(userWithLevel);
+		userServiceImpl.add(userWithoutLevel);
 		
 		User userWithLevelRead = userDAO.get(userWithLevel.getId());
 		User userWithoutLevelRead = userDAO.get(userWithoutLevel.getId());
@@ -154,14 +155,17 @@ public class UserServiceTest {
 	@Test
 	public void upgradeAllOrNothing() throws Exception {
 		
-		UserServiceImpl testUserService = new TestUserService(users.get(3).getId());
+		TestUserService testUserService = new TestUserService(users.get(3).getId());
 		UserLevelUpgradePolicyCommon policy = new UserLevelUpgradePolicyCommon();
 		policy.setUserDAO(this.userDAO);
 		policy.setMailSender(mailSender);
 		
 		testUserService.setUserDAO(this.userDAO);
 		testUserService.setUserLevelUpgradePolicy(policy);
-		testUserService.setTransactionManager(transactionManager);
+		
+		UserServiceTx txUserService = new UserServiceTx();
+		txUserService.setTransactionManager(transactionManager);
+		txUserService.setUserService(testUserService);
 		
 		userDAO.deleteAll();
 		for(User user : users) userDAO.add(user);
