@@ -171,7 +171,7 @@ public class UserServiceTest {
 		for(User user : users) userDAO.add(user);
 		
 		try {
-			testUserService.upgradeLevels();
+			txUserService.upgradeLevels();
 			fail("TestUserServiceException expected");
 		} catch (TestUserServiceException e) {
 		}

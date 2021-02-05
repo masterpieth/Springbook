@@ -5,7 +5,7 @@
 	
 	<bean id="userService" class="com.springbook.practice.service.UserServiceTx">
 		<property name="transactionManager" ref="transactionManager"/>
-		<property name="userServiceImpl" ref="userServiceImpl"></property>
+		<property name="userService" ref="userServiceImpl"></property>
 	</bean>
 	
 	<bean id="userServiceImpl" class="com.springbook.practice.service.UserServiceImpl">
