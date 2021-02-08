@@ -53,24 +53,6 @@ public class UserServiceTest {
 	
 	List<User> users;
 	
-	static class TestUserServiceException extends RuntimeException{
-		
-	}
-	
-	static class TestUserService extends UserServiceImpl {
-		private String id;
-		
-		private TestUserService(String id) {
-			this.id = id;
-		}
-		
-		protected void upgradeLevel(User user) {
-			if(user.getId().equals(this.id)) throw new TestUserServiceException();
-			
-			super.upgradeLevel(user);
-		}
-	}
-	
 	@Before
 	public void setUp() {
 		users = Arrays.asList(
@@ -176,6 +158,60 @@ public class UserServiceTest {
 		} catch (TestUserServiceException e) {
 		}
 		checkLevelUpgraded(users.get(1), false);
+	}
+	
+	static class TestUserServiceException extends RuntimeException{
+		
+	}
+	
+	static class TestUserService extends UserServiceImpl {
+		private String id;
+		
+		private TestUserService(String id) {
+			this.id = id;
+		}
+		
+		protected void upgradeLevel(User user) {
+			if(user.getId().equals(this.id)) throw new TestUserServiceException();
+			
+			super.upgradeLevel(user);
+		}
+	}
+	
+	static class MockUserDAO implements UserDAO {
+
+		private List<User> users;
+		private List<User> updated;
+		
+		private MockUserDAO(List<User> users) {
+			this.users = users;
+		}
+		
+		public List<User> getUpdated() {
+			return this.updated;
+		}
+		
+		@Override
+		public void update(User user) {
+			updated.add(user);
+		}
+
+		@Override
+		public List<User> getAll() {
+			return this.users;
+		}
+
+		@Override
+		public void deleteAll() { throw new UnsupportedOperationException(); }
+		@Override
+		public int getCount() { throw new UnsupportedOperationException(); }
+		@Override
+		public void add(User user) { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public User get(String id) { throw new UnsupportedOperationException(); }
+
+
 	}
 }
 
