@@ -8,6 +8,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,31 +72,37 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@DirtiesContext
 	public void upgradeLevels() throws Exception {
-		userDAO.deleteAll();
-		for(User user : users) userDAO.add(user);
+		UserServiceImpl userServiceImpl = new UserServiceImpl();
+		
+		MockUserDAO mockUserDAO = new MockUserDAO(this.users);
+		userServiceImpl.setUserDAO(mockUserDAO);
 		
 		MockMailSender mockMailSender = new MockMailSender();
 		
 		UserLevelUpgradePolicyCommon policy = new UserLevelUpgradePolicyCommon();
-		policy.setUserDAO(userDAO);
+		policy.setUserDAO(mockUserDAO);
 		policy.setMailSender(mockMailSender);
 		
 		userServiceImpl.setUserLevelUpgradePolicy(policy);
 		
 		userServiceImpl.upgradeLevels();
 	
-		checkLevelUpgraded(users.get(0), false);
-		checkLevelUpgraded(users.get(1), true);
-		checkLevelUpgraded(users.get(2), false);
-		checkLevelUpgraded(users.get(3), true);
-		checkLevelUpgraded(users.get(4), false);
+		List<User> updated = mockUserDAO.getUpdated();
+		assertThat(updated.size(), is(2));
+		checkUserAndLevel(updated.get(0), "wronggim2", Level.SILVER);
+		checkUserAndLevel(updated.get(1), "wronggim4", Level.GOLD);
 		
 		List<String> reauest = mockMailSender.getRequests();
 		assertThat(reauest.size(), is(2));
 		assertThat(reauest.get(0), is(users.get(1).getEmail()));
 		assertThat(reauest.get(1), is(users.get(3).getEmail()));
+	}
+	
+	//신신버전
+	private void checkUserAndLevel(User updated, String expectedId, Level expectedLevel) {
+		assertThat(updated.getId(), is(expectedId));
+		assertThat(updated.getLevel(), is(expectedLevel));
 	}
 	
 	//신버전 checkLevel
@@ -181,7 +188,7 @@ public class UserServiceTest {
 	static class MockUserDAO implements UserDAO {
 
 		private List<User> users;
-		private List<User> updated;
+		private List<User> updated = new ArrayList<User>();
 		
 		private MockUserDAO(List<User> users) {
 			this.users = users;
