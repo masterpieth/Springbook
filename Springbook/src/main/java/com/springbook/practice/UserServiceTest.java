@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import org.mockito.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,6 +124,12 @@ public class UserServiceTest {
 		assertThat(userUpdate.getLevel(), is(expectedLevel));
 	}
 	
+	@Test
+	public void mockUpgradeLevels() throws Exception {
+		UserServiceImpl userServiceImpl = new UserServiceImpl();
+		mock(UserDAO.class);
+//		UserDAO mockUserDAO = mock(UserDAO.class);
+	}
 	@Test
 	public void add() {
 		userDAO.deleteAll();
