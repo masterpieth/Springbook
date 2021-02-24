@@ -6,7 +6,7 @@
 	<bean id="userService" class="com.springbook.practice.service.UserServiceImpl">
 		<property name="userDAO" ref="userDAO"/>
 		<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
-		<property name="transactionManager" ref="transactionManager"/>
+<!-- 		<property name="transactionManager" ref="transactionManager"/> -->
 	</bean>
 	
 	<bean id="userDAO" class="com.springbook.practice.dao.UserDAOJdbc">
