@@ -30,6 +30,7 @@ public class TransactionHandler implements InvocationHandler{
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
+		//트랜잭션 적용 대상 메소드를 선별해서 트랜잭션 경계설정 기능을 부여해준다.
 		if(method.getName().startsWith(pattern)) return invokeTransaction(method, args);
 		else return method.invoke(target, args);
 	}
@@ -38,10 +39,13 @@ public class TransactionHandler implements InvocationHandler{
 		
 		TransactionStatus status = this.transActionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
+			//트랜잭션을 시작하고 타깃 오브젝트의 메소드를 호출한다.
 			Object ret = method.invoke(target, args);
+			//예외가 발생하지 않으면 커밋한다.
 			this.transActionManager.commit(status);
 			return ret;
 		} catch(InvocationTargetException e) {
+			//예외가 발생하면 트랜잭션을 롤백한다.
 			this.transActionManager.rollback(status);
 			throw e.getTargetException();
 		}
