@@ -3,6 +3,8 @@ package com.springbook.learningtest.jdk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.lang.reflect.Proxy;
+
 import org.junit.Test;
 
 public class ProxyTest {
@@ -18,6 +20,17 @@ public class ProxyTest {
 	@Test
 	public void helloUppercaseTest() {
 		Hello proxiedHello = new HelloUppercase(new HelloTarget()); //프록시를 거쳐서 타깃 오브젝트에 접근하도록 한다.
+		assertThat(proxiedHello.sayHello("nyk"), is("HELLO NYK"));
+		assertThat(proxiedHello.sayHi("nyk"), is("HI NYK"));
+		assertThat(proxiedHello.sayThankYou("nyk"), is("THANK YOU NYK"));
+	}
+	
+	@Test
+	public void proxiedHello() {
+		Hello proxiedHello = (Hello)Proxy.newProxyInstance(
+				getClass().getClassLoader()
+				, new Class[] {Hello.class}
+				, new UppercaseHandler(new HelloTarget()));
 		assertThat(proxiedHello.sayHello("nyk"), is("HELLO NYK"));
 		assertThat(proxiedHello.sayHi("nyk"), is("HI NYK"));
 		assertThat(proxiedHello.sayThankYou("nyk"), is("THANK YOU NYK"));

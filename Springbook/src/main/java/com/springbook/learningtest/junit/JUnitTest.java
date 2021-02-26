@@ -1,10 +1,6 @@
 package com.springbook.learningtest.junit;
 
-import static org.hamcrest.CoreMatchers.either;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -36,7 +32,7 @@ public class JUnitTest {
 						//같지 않아야 성공함
 //		assertThat(this, is(not(sameInstance(testObj))));
 //		testObj = this;
-		assertThat(testobjs, not(hasItem(this)));
+//		assertThat(testobjs, not(hasItem(this)));
 		testobjs.add(this);
 		
 		//첫 테스트에서는 null, 첫 테스트에서 만들어진 컨텍스트를 변수에 저장함
@@ -47,7 +43,7 @@ public class JUnitTest {
 	public void test2() {
 //		assertThat(this, is(not(sameInstance(testObj))));
 //		testObj = this;
-		assertThat(testobjs, not(hasItem(this)));
+//		assertThat(testobjs, not(hasItem(this)));
 		testobjs.add(this);
 		
 		assertTrue(contextObj == null || contextObj == this.context);
@@ -57,7 +53,7 @@ public class JUnitTest {
 	public void test3() {
 //		assertThat(this, is(not(sameInstance(testObj))));
 //		testObj = this;
-		assertThat(testobjs, not(hasItem(this)));
+//		assertThat(testobjs, not(hasItem(this)));
 		testobjs.add(this);
 		
 //		assertThat(contextObj, 
